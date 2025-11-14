@@ -13,7 +13,9 @@ namespace FluentMonitor
     public partial class MainWindow
     {
         private readonly PerformanceMonitor _performanceMonitor;
-        private readonly DispatcherTimer _updateTimer;
+        private readonly ProcessMonitor _processMonitor;
+        private readonly DispatcherTimer _performanceTimer;
+        private readonly DispatcherTimer _processTimer;
 
         private readonly ObservableCollection<double> _cpuValues = new();
         private readonly ObservableCollection<double> _memoryValues = new();
@@ -22,32 +24,41 @@ namespace FluentMonitor
         private readonly ObservableCollection<double> _networkSentValues = new();
         private readonly ObservableCollection<double> _networkReceivedValues = new();
 
-        private const int MaxDataPoints = 60;
-        private long _totalMemory;
-        private long _availableMemory;
+        private const int MaxDataPoints = 60; // 60 seconds of history
+        private SystemInfo? _systemInfo;
 
         public MainWindow()
         {
             InitializeComponent();
+
             _performanceMonitor = new PerformanceMonitor();
+            _processMonitor = new ProcessMonitor();
 
             InitializeCharts();
-            InitializeTimer();
+            InitializeTimers();
             LoadSystemInfo();
         }
 
         private async void LoadSystemInfo()
         {
-            var cpuName = await _performanceMonitor.GetCpuName();
-            CpuNameText.Text = cpuName;
+            _systemInfo = await _performanceMonitor.GetSystemInfoAsync();
 
-            var memInfo = await _performanceMonitor.GetMemoryInfo();
-            _totalMemory = memInfo.total;
+            if (_systemInfo != null)
+            {
+                // Update system info header
+                SystemCpuName.Text = _systemInfo.CpuName;
+                SystemTotalMemory.Text = FormatBytes(_systemInfo.TotalMemory);
+                SystemUptime.Text = _systemInfo.SystemUptime;
+
+                // Update CPU card details
+                CpuSpeedText.Text = $"速度: {_systemInfo.CpuBaseSpeed:F2} GHz";
+                CpuCoresText.Text = $"核心: {_systemInfo.CpuCores} / 逻辑: {_systemInfo.CpuLogicalProcessors}";
+            }
         }
 
         private void InitializeCharts()
         {
-            // CPU Chart
+            // CPU Chart - Blue gradient
             CpuChart.Series = new ISeries[]
             {
                 new LineSeries<double>
@@ -55,14 +66,13 @@ namespace FluentMonitor
                     Values = _cpuValues,
                     Fill = null,
                     GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    Stroke = new SolidColorPaint(SKColors.DeepSkyBlue) { StrokeThickness = 3 }
+                    LineSmoothness = 0.3,
+                    Stroke = new SolidColorPaint(new SKColor(0, 120, 215)) { StrokeThickness = 2 }
                 }
             };
-
             CpuChart.YAxes = new[] { new Axis { MinLimit = 0, MaxLimit = 100 } };
 
-            // Memory Chart
+            // Memory Chart - Green gradient
             MemoryChart.Series = new ISeries[]
             {
                 new LineSeries<double>
@@ -70,14 +80,13 @@ namespace FluentMonitor
                     Values = _memoryValues,
                     Fill = null,
                     GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    Stroke = new SolidColorPaint(SKColors.MediumSeaGreen) { StrokeThickness = 3 }
+                    LineSmoothness = 0.3,
+                    Stroke = new SolidColorPaint(new SKColor(16, 137, 62)) { StrokeThickness = 2 }
                 }
             };
-
             MemoryChart.YAxes = new[] { new Axis { MinLimit = 0, MaxLimit = 100 } };
 
-            // Disk Chart
+            // Disk Chart - Read (Orange) and Write (Purple)
             DiskChart.Series = new ISeries[]
             {
                 new LineSeries<double>
@@ -86,8 +95,8 @@ namespace FluentMonitor
                     Values = _diskReadValues,
                     Fill = null,
                     GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    Stroke = new SolidColorPaint(SKColors.Orange) { StrokeThickness = 2 }
+                    LineSmoothness = 0.3,
+                    Stroke = new SolidColorPaint(new SKColor(255, 140, 0)) { StrokeThickness = 2 }
                 },
                 new LineSeries<double>
                 {
@@ -95,77 +104,103 @@ namespace FluentMonitor
                     Values = _diskWriteValues,
                     Fill = null,
                     GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    Stroke = new SolidColorPaint(SKColors.Purple) { StrokeThickness = 2 }
+                    LineSmoothness = 0.3,
+                    Stroke = new SolidColorPaint(new SKColor(138, 43, 226)) { StrokeThickness = 2 }
                 }
             };
 
-            // Network Chart
+            // Network Chart - Sent (Red) and Received (Green)
             NetworkChart.Series = new ISeries[]
             {
                 new LineSeries<double>
                 {
-                    Name = "上传",
+                    Name = "发送",
                     Values = _networkSentValues,
                     Fill = null,
                     GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    Stroke = new SolidColorPaint(SKColors.Red) { StrokeThickness = 2 }
+                    LineSmoothness = 0.3,
+                    Stroke = new SolidColorPaint(new SKColor(232, 17, 35)) { StrokeThickness = 2 }
                 },
                 new LineSeries<double>
                 {
-                    Name = "下载",
+                    Name = "接收",
                     Values = _networkReceivedValues,
                     Fill = null,
                     GeometrySize = 0,
-                    LineSmoothness = 0.5,
-                    Stroke = new SolidColorPaint(SKColors.LimeGreen) { StrokeThickness = 2 }
+                    LineSmoothness = 0.3,
+                    Stroke = new SolidColorPaint(new SKColor(0, 204, 106)) { StrokeThickness = 2 }
                 }
             };
         }
 
-        private void InitializeTimer()
+        private void InitializeTimers()
         {
-            _updateTimer = new DispatcherTimer
+            // Performance data updates every 1 second
+            _performanceTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
-            _updateTimer.Tick += UpdatePerformanceData;
-            _updateTimer.Start();
+            _performanceTimer.Tick += UpdatePerformanceData;
+            _performanceTimer.Start();
+
+            // Process list updates every 2 seconds (less frequent to avoid overhead)
+            _processTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(2)
+            };
+            _processTimer.Tick += UpdateProcessList;
+            _processTimer.Start();
         }
 
-        private async void UpdatePerformanceData(object? sender, EventArgs e)
+        private void UpdatePerformanceData(object? sender, EventArgs e)
         {
-            // CPU
-            var cpuUsage = _performanceMonitor.GetCpuUsage();
-            CpuUsageText.Text = $"{cpuUsage:F1}%";
-            AddDataPoint(_cpuValues, cpuUsage);
+            var data = _performanceMonitor.GetCurrentPerformance();
 
-            // Memory
-            var memoryUsage = _performanceMonitor.GetMemoryUsage();
-            MemoryUsageText.Text = $"{memoryUsage:F1}%";
+            // Update system info
+            SystemProcessInfo.Text = $"{data.ProcessCount} / {data.ThreadCount} / {data.HandleCount}";
 
-            var memInfo = await _performanceMonitor.GetMemoryInfo();
-            var usedMemory = (memInfo.total - memInfo.available) / 1024.0 / 1024.0 / 1024.0;
-            var totalMemory = memInfo.total / 1024.0 / 1024.0 / 1024.0;
-            MemoryDetailsText.Text = $"{usedMemory:F1} GB / {totalMemory:F1} GB";
-            AddDataPoint(_memoryValues, memoryUsage);
+            // Update CPU
+            CpuUsageText.Text = $"{data.CpuUsage:F1}%";
+            AddDataPoint(_cpuValues, data.CpuUsage);
 
-            // Disk
-            var diskActivity = _performanceMonitor.GetDiskActivity();
-            var totalDiskActivity = diskActivity.readSpeed + diskActivity.writeSpeed;
-            DiskUsageText.Text = $"{totalDiskActivity:F1} MB/s";
-            DiskDetailsText.Text = $"读: {diskActivity.readSpeed:F1} MB/s  写: {diskActivity.writeSpeed:F1} MB/s";
-            AddDataPoint(_diskReadValues, diskActivity.readSpeed);
-            AddDataPoint(_diskWriteValues, diskActivity.writeSpeed);
+            // Update Memory
+            MemoryUsageText.Text = $"{data.MemoryUsage:F1}%";
+            var usedMemoryGB = data.MemoryUsed / 1024.0 / 1024.0 / 1024.0;
+            var totalMemoryGB = (data.MemoryUsed + data.MemoryAvailable) / 1024.0 / 1024.0 / 1024.0;
+            var committedGB = data.MemoryCommitted / 1024.0 / 1024.0 / 1024.0;
+            var cachedGB = data.MemoryCached / 1024.0 / 1024.0 / 1024.0;
 
-            // Network
-            var networkActivity = _performanceMonitor.GetNetworkActivity();
-            var totalNetworkActivity = networkActivity.sent + networkActivity.received;
-            NetworkSpeedText.Text = $"{totalNetworkActivity:F0} KB/s";
-            NetworkDetailsText.Text = $"↓ {networkActivity.received:F0} KB/s  ↑ {networkActivity.sent:F0} KB/s";
-            AddDataPoint(_networkSentValues, networkActivity.sent);
-            AddDataPoint(_networkReceivedValues, networkActivity.received);
+            MemoryDetailsText.Text = $"已用: {usedMemoryGB:F1} GB / {totalMemoryGB:F1} GB";
+            MemoryCommittedText.Text = $"已提交: {committedGB:F1} GB";
+            MemoryCachedText.Text = $"已缓存: {cachedGB:F1} GB";
+            AddDataPoint(_memoryValues, data.MemoryUsage);
+
+            // Update Disk
+            DiskActiveTimeText.Text = $"{data.DiskActiveTime:F0}%";
+            DiskReadText.Text = $"读取: {data.DiskReadSpeed:F2} MB/s";
+            DiskWriteText.Text = $"写入: {data.DiskWriteSpeed:F2} MB/s";
+            AddDataPoint(_diskReadValues, data.DiskReadSpeed);
+            AddDataPoint(_diskWriteValues, data.DiskWriteSpeed);
+
+            // Update Network
+            var totalNetwork = data.NetworkSentSpeed + data.NetworkReceivedSpeed;
+            NetworkTotalText.Text = FormatSpeed(totalNetwork);
+            NetworkSentText.Text = $"↑ 发送: {data.NetworkSentSpeed:F1} KB/s";
+            NetworkReceivedText.Text = $"↓ 接收: {data.NetworkReceivedSpeed:F1} KB/s";
+            AddDataPoint(_networkSentValues, data.NetworkSentSpeed);
+            AddDataPoint(_networkReceivedValues, data.NetworkReceivedSpeed);
+
+            // Update system uptime
+            if (_systemInfo != null)
+            {
+                SystemUptime.Text = _systemInfo.SystemUptime;
+            }
+        }
+
+        private void UpdateProcessList(object? sender, EventArgs e)
+        {
+            var processes = _processMonitor.GetTopProcesses(15);
+            ProcessDataGrid.ItemsSource = processes;
         }
 
         private void AddDataPoint(ObservableCollection<double> collection, double value)
@@ -177,9 +212,41 @@ namespace FluentMonitor
             }
         }
 
+        private string FormatBytes(long bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            double len = bytes;
+            int order = 0;
+
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len = len / 1024;
+            }
+
+            return $"{len:F2} {sizes[order]}";
+        }
+
+        private string FormatSpeed(float kbps)
+        {
+            if (kbps < 1024)
+            {
+                return $"{kbps:F1} KB/s";
+            }
+            else if (kbps < 1024 * 1024)
+            {
+                return $"{kbps / 1024:F2} MB/s";
+            }
+            else
+            {
+                return $"{kbps / 1024 / 1024:F2} GB/s";
+            }
+        }
+
         protected override void OnClosed(EventArgs e)
         {
-            _updateTimer.Stop();
+            _performanceTimer.Stop();
+            _processTimer.Stop();
             _performanceMonitor.Dispose();
             base.OnClosed(e);
         }

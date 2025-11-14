@@ -7,8 +7,10 @@
                  xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
                  mc:Ignorable="d"
                  Title="系统性能监测器 - Fluent Monitor"
-                 Height="800"
-                 Width="1200"
+                 Height="900"
+                 Width="1400"
+                 MinHeight="600"
+                 MinWidth="800"
                  WindowStartupLocation="CenterScreen"
                  ExtendsContentIntoTitleBar="True"
                  WindowBackdropType="Mica"
@@ -22,202 +24,355 @@
 
         <!-- Title Bar -->
         <ui:TitleBar Grid.Row="0"
-                     Title="系统性能监测器"
-                     Icon="pack://application:,,,/Assets/icon.png"
+                     Title="系统性能监测器 - Fluent Monitor"
                      ShowMaximize="True"
                      ShowMinimize="True"/>
 
-        <!-- Main Content -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <Grid Margin="20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <!-- Header -->
-                <StackPanel Grid.Row="0" Margin="0,0,0,20">
-                    <TextBlock Text="系统性能监测器"
-                               FontSize="32"
-                               FontWeight="Bold"
-                               Margin="0,0,0,5"/>
-                    <TextBlock Text="实时监控您的 Windows 系统性能和硬件状态"
-                               FontSize="14"
-                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                </StackPanel>
-
-                <!-- Quick Stats Cards -->
-                <Grid Grid.Row="1" Margin="0,0,0,20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- CPU Card -->
-                    <ui:Card Grid.Column="0" Margin="0,0,10,0" Padding="20">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <ui:SymbolIcon Symbol="Memories24" FontSize="24" Margin="0,0,10,0"/>
-                                <TextBlock Text="CPU" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <TextBlock x:Name="CpuUsageText"
-                                       Text="0%"
-                                       FontSize="36"
-                                       FontWeight="Bold"
-                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
-                            <TextBlock x:Name="CpuNameText"
-                                       Text="加载中..."
-                                       FontSize="12"
-                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       TextTrimming="CharacterEllipsis"/>
+        <!-- Main Content with Tabs -->
+        <Grid Grid.Row="1" Margin="10">
+            <TabControl Style="{DynamicResource {x:Type TabControl}}">
+                <!-- Performance Tab -->
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="ChartMultiple24" Margin="0,0,8,0"/>
+                            <TextBlock Text="性能概览" FontSize="14"/>
                         </StackPanel>
-                    </ui:Card>
+                    </TabItem.Header>
 
-                    <!-- Memory Card -->
-                    <ui:Card Grid.Column="1" Margin="0,0,10,0" Padding="20">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <ui:SymbolIcon Symbol="Server24" FontSize="24" Margin="0,0,10,0"/>
-                                <TextBlock Text="内存" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <TextBlock x:Name="MemoryUsageText"
-                                       Text="0%"
-                                       FontSize="36"
-                                       FontWeight="Bold"
-                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
-                            <TextBlock x:Name="MemoryDetailsText"
-                                       Text="0 GB / 0 GB"
-                                       FontSize="12"
-                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                        </StackPanel>
-                    </ui:Card>
-
-                    <!-- Disk Card -->
-                    <ui:Card Grid.Column="2" Margin="0,0,10,0" Padding="20">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <ui:SymbolIcon Symbol="SaveMultiple24" FontSize="24" Margin="0,0,10,0"/>
-                                <TextBlock Text="磁盘" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <TextBlock x:Name="DiskUsageText"
-                                       Text="0%"
-                                       FontSize="36"
-                                       FontWeight="Bold"
-                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
-                            <TextBlock x:Name="DiskDetailsText"
-                                       Text="0 MB/s"
-                                       FontSize="12"
-                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                        </StackPanel>
-                    </ui:Card>
-
-                    <!-- Network Card -->
-                    <ui:Card Grid.Column="3" Padding="20">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <ui:SymbolIcon Symbol="Wifi124" FontSize="24" Margin="0,0,10,0"/>
-                                <TextBlock Text="网络" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <TextBlock x:Name="NetworkSpeedText"
-                                       Text="0 KB/s"
-                                       FontSize="36"
-                                       FontWeight="Bold"
-                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
-                            <TextBlock x:Name="NetworkDetailsText"
-                                       Text="↓ 0 KB/s ↑ 0 KB/s"
-                                       FontSize="12"
-                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                        </StackPanel>
-                    </ui:Card>
-                </Grid>
-
-                <!-- Charts Section -->
-                <Grid Grid.Row="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- CPU Chart -->
-                    <ui:Card Grid.Row="0" Grid.Column="0" Margin="0,0,10,10" Padding="20">
-                        <Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid Margin="15">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0"
-                                       Text="CPU 使用率历史"
-                                       FontSize="18"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,15"/>
-                            <lvc:CartesianChart Grid.Row="1"
-                                                x:Name="CpuChart"
-                                                LegendPosition="Hidden"/>
-                        </Grid>
-                    </ui:Card>
 
-                    <!-- Memory Chart -->
-                    <ui:Card Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" Padding="20">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0"
-                                       Text="内存使用率历史"
-                                       FontSize="18"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,15"/>
-                            <lvc:CartesianChart Grid.Row="1"
-                                                x:Name="MemoryChart"
-                                                LegendPosition="Hidden"/>
-                        </Grid>
-                    </ui:Card>
+                            <!-- System Info Header -->
+                            <ui:Card Grid.Row="0" Margin="0,0,0,15" Padding="15">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                    <!-- Disk Chart -->
-                    <ui:Card Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" Padding="20">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0"
-                                       Text="磁盘活动"
-                                       FontSize="18"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,15"/>
-                            <lvc:CartesianChart Grid.Row="1"
-                                                x:Name="DiskChart"
-                                                LegendPosition="Bottom"/>
-                        </Grid>
-                    </ui:Card>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="处理器" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        <TextBlock x:Name="SystemCpuName" Text="加载中..." FontSize="14" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                    </StackPanel>
 
-                    <!-- Network Chart -->
-                    <ui:Card Grid.Row="1" Grid.Column="1" Padding="20">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0"
-                                       Text="网络活动"
-                                       FontSize="18"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,15"/>
-                            <lvc:CartesianChart Grid.Row="1"
-                                                x:Name="NetworkChart"
-                                                LegendPosition="Bottom"/>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="系统内存" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        <TextBlock x:Name="SystemTotalMemory" Text="加载中..." FontSize="14" FontWeight="SemiBold"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="系统运行时间" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        <TextBlock x:Name="SystemUptime" Text="加载中..." FontSize="14" FontWeight="SemiBold"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="3">
+                                        <TextBlock Text="进程/线程/句柄" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        <TextBlock x:Name="SystemProcessInfo" Text="0 / 0 / 0" FontSize="14" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </ui:Card>
+
+                            <!-- Quick Stats Cards -->
+                            <Grid Grid.Row="1" Margin="0,0,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- CPU Card -->
+                                <ui:Card Grid.Column="0" Margin="0,0,7.5,0" Padding="20">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                            <ui:SymbolIcon Symbol="Memories24" FontSize="20" Margin="0,0,8,0"/>
+                                            <TextBlock Text="CPU" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                            <TextBlock x:Name="CpuUsageText"
+                                                       Text="0%"
+                                                       FontSize="42"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="2">
+                                            <TextBlock x:Name="CpuSpeedText"
+                                                       Text="速度: 0.0 GHz"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Margin="0,0,0,2"/>
+                                            <TextBlock x:Name="CpuCoresText"
+                                                       Text="核心: 0 / 逻辑: 0"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </ui:Card>
+
+                                <!-- Memory Card -->
+                                <ui:Card Grid.Column="1" Margin="7.5,0,7.5,0" Padding="20">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                            <ui:SymbolIcon Symbol="Server24" FontSize="20" Margin="0,0,8,0"/>
+                                            <TextBlock Text="内存" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                            <TextBlock x:Name="MemoryUsageText"
+                                                       Text="0%"
+                                                       FontSize="42"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="2">
+                                            <TextBlock x:Name="MemoryDetailsText"
+                                                       Text="已用: 0 GB / 0 GB"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Margin="0,0,0,2"/>
+                                            <TextBlock x:Name="MemoryCommittedText"
+                                                       Text="已提交: 0 GB"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Margin="0,0,0,2"/>
+                                            <TextBlock x:Name="MemoryCachedText"
+                                                       Text="已缓存: 0 GB"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </ui:Card>
+
+                                <!-- Disk Card -->
+                                <ui:Card Grid.Column="2" Margin="7.5,0,7.5,0" Padding="20">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                            <ui:SymbolIcon Symbol="SaveMultiple24" FontSize="20" Margin="0,0,8,0"/>
+                                            <TextBlock Text="磁盘" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                            <TextBlock x:Name="DiskActiveTimeText"
+                                                       Text="0%"
+                                                       FontSize="42"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="2">
+                                            <TextBlock x:Name="DiskReadText"
+                                                       Text="读取: 0 MB/s"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Margin="0,0,0,2"/>
+                                            <TextBlock x:Name="DiskWriteText"
+                                                       Text="写入: 0 MB/s"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </ui:Card>
+
+                                <!-- Network Card -->
+                                <ui:Card Grid.Column="3" Margin="7.5,0,0,0" Padding="20">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                            <ui:SymbolIcon Symbol="Wifi124" FontSize="20" Margin="0,0,8,0"/>
+                                            <TextBlock Text="网络" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                            <TextBlock x:Name="NetworkTotalText"
+                                                       Text="0 KB/s"
+                                                       FontSize="36"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="2">
+                                            <TextBlock x:Name="NetworkSentText"
+                                                       Text="↑ 发送: 0 KB/s"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Margin="0,0,0,2"/>
+                                            <TextBlock x:Name="NetworkReceivedText"
+                                                       Text="↓ 接收: 0 KB/s"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </ui:Card>
+                            </Grid>
+
+                            <!-- Charts Section -->
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- CPU Chart -->
+                                <ui:Card Grid.Row="0" Grid.Column="0" Margin="0,0,7.5,7.5" Padding="15">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0"
+                                                   Text="CPU 使用率历史 (60秒)"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,10"/>
+                                        <lvc:CartesianChart Grid.Row="1"
+                                                            x:Name="CpuChart"
+                                                            LegendPosition="Hidden"/>
+                                    </Grid>
+                                </ui:Card>
+
+                                <!-- Memory Chart -->
+                                <ui:Card Grid.Row="0" Grid.Column="1" Margin="7.5,0,0,7.5" Padding="15">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0"
+                                                   Text="内存使用率历史 (60秒)"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,10"/>
+                                        <lvc:CartesianChart Grid.Row="1"
+                                                            x:Name="MemoryChart"
+                                                            LegendPosition="Hidden"/>
+                                    </Grid>
+                                </ui:Card>
+
+                                <!-- Disk Chart -->
+                                <ui:Card Grid.Row="1" Grid.Column="0" Margin="0,7.5,7.5,0" Padding="15">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0"
+                                                   Text="磁盘活动 (MB/s)"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,10"/>
+                                        <lvc:CartesianChart Grid.Row="1"
+                                                            x:Name="DiskChart"
+                                                            LegendPosition="Bottom"/>
+                                    </Grid>
+                                </ui:Card>
+
+                                <!-- Network Chart -->
+                                <ui:Card Grid.Row="1" Grid.Column="1" Margin="7.5,7.5,0,0" Padding="15">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0"
+                                                   Text="网络活动 (KB/s)"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,10"/>
+                                        <lvc:CartesianChart Grid.Row="1"
+                                                            x:Name="NetworkChart"
+                                                            LegendPosition="Bottom"/>
+                                    </Grid>
+                                </ui:Card>
+                            </Grid>
                         </Grid>
-                    </ui:Card>
-                </Grid>
-            </Grid>
-        </ScrollViewer>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- Processes Tab -->
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Apps24" Margin="0,0,8,0"/>
+                            <TextBlock Text="进程" FontSize="14"/>
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <Grid Margin="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                                   Text="资源使用率最高的前 15 个进程"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,15"/>
+
+                        <ui:Card Grid.Row="1" Padding="0">
+                            <DataGrid x:Name="ProcessDataGrid"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      GridLinesVisibility="Horizontal"
+                                      HeadersVisibility="Column"
+                                      CanUserResizeColumns="True"
+                                      CanUserSortColumns="True"
+                                      SelectionMode="Single"
+                                      AlternatingRowBackground="{DynamicResource SubtleFillColorSecondaryBrush}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="进程 ID" Binding="{Binding ProcessId}" Width="100"/>
+                                    <DataGridTextColumn Header="进程名称" Binding="{Binding ProcessName}" Width="*"/>
+                                    <DataGridTextColumn Header="CPU %" Binding="{Binding CpuUsage, StringFormat=F2}" Width="120"/>
+                                    <DataGridTextColumn Header="内存" Binding="{Binding MemoryUsageFormatted}" Width="120"/>
+                                    <DataGridTextColumn Header="线程数" Binding="{Binding ThreadCount}" Width="100"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ui:Card>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </ui:FluentWindow>

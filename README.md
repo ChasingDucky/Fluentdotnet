@@ -9,27 +9,45 @@
 ## ✨ 特性
 
 - 🎨 **现代化界面** - 采用 Microsoft Fluent Design System 设计语言
-- 📊 **实时监测** - 实时监控 CPU、内存、磁盘和网络性能
-- 📈 **动态图表** - 使用 LiveCharts 展示历史数据趋势
+- 📊 **实时监测** - 持续实时监控 CPU、内存、磁盘和网络性能（1秒刷新）
+- 📈 **动态图表** - 使用 LiveCharts 展示 60 秒历史数据趋势
 - 🌓 **深色模式** - 支持 Windows 11 风格的 Mica 材质和圆角窗口
-- ⚡ **高性能** - 轻量级设计,低资源占用
+- ⚡ **高性能** - 轻量级设计，低资源占用
 - 🎯 **精准数据** - 使用 Windows Performance Counters 获取准确的系统信息
+- 🔍 **进程监控** - 实时显示资源占用最高的进程列表
+- 📋 **详细指标** - 对标 Windows 任务管理器的专业级监测面板
+- 🖥️ **多核监测** - 支持多核 CPU 的独立监测
+- 📊 **系统信息** - 显示 CPU 型号、频率、核心数、内存、运行时间等
 
-## 📸 截图
+## 📸 功能概览
 
 应用程序提供以下监测功能:
 
-### 📊 实时性能卡片
-- **CPU 使用率** - 显示处理器使用率和 CPU 型号
-- **内存使用率** - 显示内存使用百分比和已用/总容量
-- **磁盘活动** - 显示读写速度
-- **网络活动** - 显示上传/下载速度
+### 🎯 性能概览页面
 
-### 📈 历史数据图表
-- CPU 使用率历史曲线
-- 内存使用率历史曲线
-- 磁盘读写活动趋势
-- 网络上传/下载趋势
+#### 系统信息栏
+- **处理器信息** - CPU 型号、核心数、逻辑处理器数、运行频率
+- **系统内存** - 总内存容量
+- **系统运行时间** - 自上次启动以来的运行时间
+- **进程/线程/句柄** - 系统当前的进程、线程和句柄总数
+
+#### 实时性能卡片
+- **CPU 使用率** - 显示总体 CPU 使用率、运行速度、核心/逻辑处理器数
+- **内存使用率** - 显示内存使用百分比、已用/总容量、已提交内存、缓存内存
+- **磁盘活动** - 显示磁盘活动时间百分比、读取速度、写入速度
+- **网络活动** - 显示总网络速度、上传速度、下载速度
+
+#### 历史数据图表（60秒滚动）
+- **CPU 使用率历史** - 蓝色曲线展示 CPU 使用率变化
+- **内存使用率历史** - 绿色曲线展示内存使用率变化
+- **磁盘读写活动** - 橙色（读取）和紫色（写入）双曲线
+- **网络上传/下载** - 红色（发送）和绿色（接收）双曲线
+
+### 🔍 进程监控页面
+- **实时进程列表** - 显示资源占用最高的前 15 个进程
+- **进程详细信息** - 进程 ID、进程名称、CPU 使用率、内存占用、线程数
+- **自动排序** - 按 CPU 使用率和内存占用自动排序
+- **2秒刷新** - 每 2 秒更新一次进程列表
 
 ## 🚀 快速开始
 
@@ -70,10 +88,10 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 ## 🏗️ 技术栈
 
 - **框架**: .NET 8.0 WPF
-- **UI 库**: [WPF-UI](https://github.com/lepoco/wpfui) - Fluent Design 组件库
-- **图表库**: [LiveCharts2](https://livecharts.dev/) - 现代化图表库
-- **性能监测**: System.Management、PerformanceCounters
-- **硬件信息**: Hardware.Info
+- **UI 库**: [WPF-UI](https://github.com/lepoco/wpfui) 3.0.5 - Fluent Design 组件库
+- **图表库**: [LiveCharts2](https://livecharts.dev/) - 现代化图表库（SkiaSharp 渲染）
+- **性能监测**: System.Management 8.0.0、PerformanceCounters
+- **硬件信息**: Hardware.Info 100.1.0.1
 
 ## 📦 主要依赖
 
@@ -87,20 +105,30 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 ## 🎯 功能模块
 
 ### PerformanceMonitor 服务
-位于 `Services/PerformanceMonitor.cs`,负责:
-- 初始化 Windows Performance Counters
-- 获取 CPU 使用率
-- 获取内存使用率和详细信息
-- 监测磁盘读写速度
+位于 `FluentMonitor/Services/PerformanceMonitor.cs`,负责:
+- 初始化 Windows Performance Counters（CPU、内存、磁盘、网络）
+- 获取总体 CPU 使用率和多核 CPU 独立使用率
+- 获取详细内存信息（使用率、已用、可用、已提交、缓存）
+- 监测磁盘读写速度和活动时间百分比
 - 监测网络上传/下载速度
-- 获取硬件信息(CPU 型号等)
+- 获取系统信息（CPU 型号、频率、核心数、内存总量、运行时间）
+- 获取系统进程、线程、句柄总数
+
+### ProcessMonitor 服务
+位于 `FluentMonitor/Services/ProcessMonitor.cs`,负责:
+- 获取系统中所有运行的进程
+- 计算每个进程的 CPU 使用率
+- 获取进程内存占用、线程数等信息
+- 按 CPU 和内存使用率排序
+- 返回资源占用最高的前 N 个进程
 
 ### MainWindow
 位于 `MainWindow.xaml` 和 `MainWindow.xaml.cs`,负责:
-- 展示 Fluent Design 用户界面
-- 实时更新性能数据
-- 管理图表数据集合
-- 处理数据点添加和限制
+- 展示 Fluent Design 用户界面（选项卡式布局）
+- 实时更新性能数据（1秒刷新）
+- 实时更新进程列表（2秒刷新）
+- 管理图表数据集合（60秒滚动窗口）
+- 格式化显示各种数据单位
 
 ## 🎨 界面设计
 
@@ -115,31 +143,54 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 
 ## 🔧 配置
 
-### 修改刷新间隔
-在 `MainWindow.xaml.cs` 中修改:
+### 修改性能数据刷新间隔
+在 `MainWindow.xaml.cs:139-144` 中修改:
 ```csharp
-_updateTimer = new DispatcherTimer
+_performanceTimer = new DispatcherTimer
 {
-    Interval = TimeSpan.FromSeconds(1) // 修改此值
+    Interval = TimeSpan.FromSeconds(1) // 修改此值（秒）
 };
 ```
 
-### 修改图表数据点数量
-在 `MainWindow.xaml.cs` 中修改:
+### 修改进程列表刷新间隔
+在 `MainWindow.xaml.cs:147-152` 中修改:
 ```csharp
-private const int MaxDataPoints = 60; // 修改此值
+_processTimer = new DispatcherTimer
+{
+    Interval = TimeSpan.FromSeconds(2) // 修改此值（秒）
+};
+```
+
+### 修改图表历史数据长度
+在 `MainWindow.xaml.cs:27` 中修改:
+```csharp
+private const int MaxDataPoints = 60; // 修改此值（数据点数量）
+```
+
+### 修改进程列表显示数量
+在 `MainWindow.xaml.cs:202` 中修改:
+```csharp
+var processes = _processMonitor.GetTopProcesses(15); // 修改此值
 ```
 
 ## 📝 待办事项
 
+- [x] 添加进程监控功能
+- [x] 添加多核 CPU 监测
+- [x] 添加详细的内存信息
+- [x] 提高刷新频率到 1 秒
 - [ ] 添加 GPU 监测功能
 - [ ] 添加温度监测
-- [ ] 添加进程管理器
+- [ ] 添加进程结束功能
+- [ ] 添加磁盘详细信息（各分区使用情况）
+- [ ] 添加启动项管理
 - [ ] 添加自启动功能
 - [ ] 添加系统托盘支持
-- [ ] 添加数据导出功能
+- [ ] 添加数据导出功能（CSV/JSON）
+- [ ] 添加性能警报功能
 - [ ] 添加自定义主题
-- [ ] 添加多语言支持
+- [ ] 添加多语言支持（英文/中文）
+- [ ] 添加深色/浅色主题切换
 
 ## 🤝 贡献
 

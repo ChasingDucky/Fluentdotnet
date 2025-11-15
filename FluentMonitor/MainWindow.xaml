@@ -26,7 +26,6 @@
 
         <!-- System Tray Icon -->
         <tb:TaskbarIcon x:Name="TrayIcon"
-                        IconSource="/icon.ico"
                         ToolTipText="Fluent Monitor - 系统性能监测器"
                         TrayMouseDoubleClick="TrayIcon_TrayMouseDoubleClick">
             <tb:TaskbarIcon.ContextMenu>

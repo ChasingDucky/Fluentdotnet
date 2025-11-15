@@ -185,7 +185,7 @@ namespace FluentMonitor
             if (memoryInfo != null && memoryInfo.Count > 0)
             {
                 var memory = memoryInfo[0];
-                var recommendation = _deviceValuationService.EvaluateMemory(memory.Speed, (int)(memory.Capacity / 1024 / 1024 / 1024));
+                var recommendation = _deviceValuationService.EvaluateMemory((int)memory.Speed, (int)(memory.Capacity / 1024 / 1024 / 1024));
                 if (recommendation != null)
                 {
                     recommendations.Add(recommendation);

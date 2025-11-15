@@ -32,13 +32,13 @@
                 <ContextMenu>
                     <MenuItem Header="打开" Click="ShowWindow_Click">
                         <MenuItem.Icon>
-                            <ui:SymbolIcon Symbol="Window24"/>
+                            <ui:SymbolIcon Symbol="Window20"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
                     <MenuItem Header="退出" Click="Exit_Click">
                         <MenuItem.Icon>
-                            <ui:SymbolIcon Symbol="Dismiss24"/>
+                            <ui:SymbolIcon Symbol="Dismiss20"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
@@ -122,7 +122,7 @@
                                         </Grid.RowDefinitions>
 
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
-                                            <ui:SymbolIcon Symbol="Chip24" FontSize="24" Margin="0,0,10,0"/>
+                                            <ui:SymbolIcon Symbol="DeveloperBoard20" FontSize="24" Margin="0,0,10,0"/>
                                             <TextBlock Text="CPU" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
@@ -159,7 +159,7 @@
                                         </Grid.RowDefinitions>
 
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
-                                            <ui:SymbolIcon Symbol="Server24" FontSize="24" Margin="0,0,10,0"/>
+                                            <ui:SymbolIcon Symbol="Server20" FontSize="24" Margin="0,0,10,0"/>
                                             <TextBlock Text="内存" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
@@ -238,7 +238,7 @@
                                         </Grid.RowDefinitions>
 
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
-                                            <ui:SymbolIcon Symbol="Wifi24" FontSize="24" Margin="0,0,10,0"/>
+                                            <ui:SymbolIcon Symbol="Wifi120" FontSize="24" Margin="0,0,10,0"/>
                                             <TextBlock Text="网络" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
@@ -357,7 +357,7 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Symbol="Desktop24" Margin="0,0,8,0"/>
+                            <ui:SymbolIcon Symbol="Desktop20" Margin="0,0,8,0"/>
                             <TextBlock Text="硬件信息" FontSize="14"/>
                         </StackPanel>
                     </TabItem.Header>
@@ -381,7 +381,7 @@
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <ui:SymbolIcon Grid.Column="0"
-                                                          Symbol="Warning24"
+                                                          Symbol="Warning20"
                                                           FontSize="32"
                                                           Foreground="#FF8C00"
                                                           Margin="0,0,15,0"
@@ -397,7 +397,7 @@
                                                           Margin="0,3,0,0"/>
                                             </StackPanel>
                                             <ui:SymbolIcon Grid.Column="2"
-                                                          Symbol="ChevronDown24"
+                                                          Symbol="ChevronDown20"
                                                           FontSize="24"
                                                           Foreground="#FF8C00"
                                                           VerticalAlignment="Center"/>
@@ -417,7 +417,7 @@
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
                                                             <ui:SymbolIcon Grid.Column="0"
-                                                                          Symbol="Info24"
+                                                                          Symbol="Info20"
                                                                           FontSize="36"
                                                                           Margin="0,0,20,0"
                                                                           Foreground="#FF8C00"/>
@@ -879,7 +879,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Document24" FontSize="32" Margin="0,0,15,0"/>
+                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Document20" FontSize="32" Margin="0,0,15,0"/>
                                                     <StackPanel Grid.Column="1">
                                                         <TextBlock x:Name="BiosManufacturer" Text="Unknown" FontSize="14" FontWeight="SemiBold"/>
                                                         <TextBlock x:Name="BiosName" Text="Unknown" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
@@ -926,7 +926,7 @@
                                                     </Grid.RowDefinitions>
 
                                                     <ui:SymbolIcon Grid.Column="0" Grid.RowSpan="3"
-                                                                   Symbol="Desktop24"
+                                                                   Symbol="Desktop20"
                                                                    FontSize="48"
                                                                    Margin="0,0,20,0"
                                                                    Foreground="#10893E"/>
@@ -1066,7 +1066,7 @@
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Wifi24" FontSize="32" Margin="0,0,15,0"/>
+                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Wifi120" FontSize="32" Margin="0,0,15,0"/>
 
                                                     <StackPanel Grid.Column="1">
                                                         <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold"/>
@@ -1110,7 +1110,7 @@
                                         </Grid.RowDefinitions>
 
                                         <ui:SymbolIcon Grid.Column="0" Grid.RowSpan="2"
-                                                       Symbol="Window24"
+                                                       Symbol="Window20"
                                                        FontSize="48"
                                                        Margin="0,0,20,0"
                                                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
@@ -1208,7 +1208,7 @@
                                     <ContextMenu>
                                         <MenuItem Header="结束进程" Click="EndProcess_Click">
                                             <MenuItem.Icon>
-                                                <ui:SymbolIcon Symbol="Dismiss24" Foreground="Red"/>
+                                                <ui:SymbolIcon Symbol="Dismiss20" Foreground="Red"/>
                                             </MenuItem.Icon>
                                         </MenuItem>
                                     </ContextMenu>
@@ -1469,7 +1469,7 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Grid.Column="0" Symbol="Chip24" FontSize="40" Margin="0,0,15,0" Foreground="#0078D4"/>
+                                            <ui:SymbolIcon Grid.Column="0" Symbol="DeveloperBoard20" FontSize="40" Margin="0,0,15,0" Foreground="#0078D4"/>
                                             <StackPanel Grid.Column="1">
                                                 <TextBlock Text="CPU 单核" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                                 <TextBlock x:Name="CpuSingleCoreScoreText" Text="0" FontSize="28" FontWeight="Bold" Foreground="#0078D4"/>

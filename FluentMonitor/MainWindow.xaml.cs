@@ -1,12 +1,15 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using FluentMonitor.Services;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using Wpf.Ui.Appearance;
 
 namespace FluentMonitor
 {
@@ -14,8 +17,10 @@ namespace FluentMonitor
     {
         private readonly PerformanceMonitor _performanceMonitor;
         private readonly ProcessMonitor _processMonitor;
+        private readonly DiskMonitor _diskMonitor;
         private readonly DispatcherTimer _performanceTimer;
         private readonly DispatcherTimer _processTimer;
+        private readonly DispatcherTimer _diskTimer;
 
         private readonly ObservableCollection<double> _cpuValues = new();
         private readonly ObservableCollection<double> _memoryValues = new();
@@ -26,6 +31,7 @@ namespace FluentMonitor
 
         private const int MaxDataPoints = 60; // 60 seconds of history
         private SystemInfo? _systemInfo;
+        private bool _isClosing = false;
 
         public MainWindow()
         {
@@ -33,10 +39,19 @@ namespace FluentMonitor
 
             _performanceMonitor = new PerformanceMonitor();
             _processMonitor = new ProcessMonitor();
+            _diskMonitor = new DiskMonitor();
 
             InitializeCharts();
             InitializeTimers();
             LoadSystemInfo();
+            LoadDiskInfo();
+            InitializeTheme();
+        }
+
+        private void InitializeTheme()
+        {
+            // Set default theme to Dark
+            ThemeComboBox.SelectedIndex = 0;
         }
 
         private async void LoadSystemInfo()
@@ -54,6 +69,12 @@ namespace FluentMonitor
                 CpuSpeedText.Text = $"速度: {_systemInfo.CpuBaseSpeed:F2} GHz";
                 CpuCoresText.Text = $"核心: {_systemInfo.CpuCores} / 逻辑: {_systemInfo.CpuLogicalProcessors}";
             }
+        }
+
+        private void LoadDiskInfo()
+        {
+            var diskInfo = _diskMonitor.GetDiskInformation();
+            DiskItemsControl.ItemsSource = diskInfo;
         }
 
         private void InitializeCharts()
@@ -150,6 +171,14 @@ namespace FluentMonitor
             };
             _processTimer.Tick += UpdateProcessList;
             _processTimer.Start();
+
+            // Disk info updates every 5 seconds
+            _diskTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(5)
+            };
+            _diskTimer.Tick += (s, e) => LoadDiskInfo();
+            _diskTimer.Start();
         }
 
         private void UpdatePerformanceData(object? sender, EventArgs e)
@@ -243,10 +272,103 @@ namespace FluentMonitor
             }
         }
 
+        // System Tray Events
+        private void Window_StateChanged(object? sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized && MinimizeToTrayToggle.IsChecked == true)
+            {
+                Hide();
+                TrayIcon.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void TrayIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            ShowMainWindow();
+        }
+
+        private void ShowWindow_Click(object sender, RoutedEventArgs e)
+        {
+            ShowMainWindow();
+        }
+
+        private void ShowMainWindow()
+        {
+            Show();
+            WindowState = WindowState.Normal;
+            Activate();
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            _isClosing = true;
+            Application.Current.Shutdown();
+        }
+
+        // Process Management
+        private void EndProcess_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProcessDataGrid.SelectedItem is ProcessInfo processInfo)
+            {
+                var result = MessageBox.Show(
+                    $"确定要结束进程 \"{processInfo.ProcessName}\" (PID: {processInfo.ProcessId}) 吗?\n\n警告：结束系统进程可能导致系统不稳定。",
+                    "确认结束进程",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        var process = Process.GetProcessById(processInfo.ProcessId);
+                        process.Kill();
+                        MessageBox.Show($"进程 \"{processInfo.ProcessName}\" 已成功结束。", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"无法结束进程: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
+        // Theme Management
+        private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ThemeComboBox.SelectedItem is ComboBoxItem item)
+            {
+                var theme = item.Tag?.ToString();
+                if (theme == "Dark")
+                {
+                    ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+                }
+                else if (theme == "Light")
+                {
+                    ApplicationThemeManager.Apply(ApplicationTheme.Light);
+                }
+            }
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            if (!_isClosing && MinimizeToTrayToggle.IsChecked == true)
+            {
+                e.Cancel = true;
+                WindowState = WindowState.Minimized;
+            }
+            else
+            {
+                TrayIcon.Dispose();
+            }
+
+            base.OnClosing(e);
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             _performanceTimer.Stop();
             _processTimer.Stop();
+            _diskTimer.Stop();
             _performanceMonitor.Dispose();
             base.OnClosed(e);
         }

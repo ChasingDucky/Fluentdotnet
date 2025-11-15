@@ -11,10 +11,12 @@
 - 🎨 **现代化界面** - 采用 Microsoft Fluent Design System 设计语言
 - 📊 **实时监测** - 持续实时监控 CPU、内存、磁盘和网络性能（1秒刷新）
 - 📈 **动态图表** - 使用 LiveCharts 展示 60 秒历史数据趋势
-- 🌓 **深色模式** - 支持 Windows 11 风格的 Mica 材质和圆角窗口
+- 🌓 **主题切换** - 支持深色/浅色主题，Windows 11 风格的 Mica 材质和圆角窗口
 - ⚡ **高性能** - 轻量级设计，低资源占用
 - 🎯 **精准数据** - 使用 Windows Performance Counters 获取准确的系统信息
-- 🔍 **进程监控** - 实时显示资源占用最高的进程列表
+- 🔍 **进程管理** - 实时显示资源占用最高的进程，支持右键结束进程
+- 💾 **磁盘监控** - 显示所有磁盘分区的详细使用情况
+- 🔔 **系统托盘** - 支持最小化到系统托盘，后台持续监控
 - 📋 **详细指标** - 对标 Windows 任务管理器的专业级监测面板
 - 🖥️ **多核监测** - 支持多核 CPU 的独立监测
 - 📊 **系统信息** - 显示 CPU 型号、频率、核心数、内存、运行时间等
@@ -47,7 +49,19 @@
 - **实时进程列表** - 显示资源占用最高的前 15 个进程
 - **进程详细信息** - 进程 ID、进程名称、CPU 使用率、内存占用、线程数
 - **自动排序** - 按 CPU 使用率和内存占用自动排序
+- **进程管理** - 右键菜单结束进程（附带安全确认）
 - **2秒刷新** - 每 2 秒更新一次进程列表
+
+### 💾 磁盘监控页面
+- **分区列表** - 显示所有固定磁盘分区
+- **使用率可视化** - 进度条直观展示磁盘使用情况
+- **详细信息** - 卷标、驱动器号、文件系统、总容量、已用空间、可用空间、使用率百分比
+- **5秒刷新** - 每 5 秒更新一次磁盘信息
+
+### ⚙️ 设置页面
+- **主题切换** - 在深色和浅色主题之间切换
+- **系统托盘选项** - 配置最小化到系统托盘行为
+- **应用信息** - 显示版本号和许可证信息
 
 ## 🚀 快速开始
 
@@ -92,6 +106,7 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 - **图表库**: [LiveCharts2](https://livecharts.dev/) - 现代化图表库（SkiaSharp 渲染）
 - **性能监测**: System.Management 8.0.0、PerformanceCounters
 - **硬件信息**: Hardware.Info 100.1.0.1
+- **系统托盘**: Hardcodet.NotifyIcon.Wpf 1.1.0
 
 ## 📦 主要依赖
 
@@ -100,6 +115,7 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc2" />
 <PackageReference Include="System.Management" Version="8.0.0" />
 <PackageReference Include="Hardware.Info" Version="100.1.0.1" />
+<PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
 ```
 
 ## 🎯 功能模块
@@ -122,12 +138,23 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 - 按 CPU 和内存使用率排序
 - 返回资源占用最高的前 N 个进程
 
+### DiskMonitor 服务
+位于 `FluentMonitor/Services/DiskMonitor.cs`,负责:
+- 获取系统中所有固定磁盘分区
+- 读取分区的详细信息（卷标、文件系统、容量等）
+- 计算磁盘使用率
+- 格式化显示磁盘容量单位
+
 ### MainWindow
 位于 `MainWindow.xaml` 和 `MainWindow.xaml.cs`,负责:
-- 展示 Fluent Design 用户界面（选项卡式布局）
+- 展示 Fluent Design 用户界面（4个选项卡式布局）
 - 实时更新性能数据（1秒刷新）
 - 实时更新进程列表（2秒刷新）
+- 实时更新磁盘信息（5秒刷新）
 - 管理图表数据集合（60秒滚动窗口）
+- 系统托盘集成和窗口状态管理
+- 主题切换功能
+- 进程结束功能（带确认对话框）
 - 格式化显示各种数据单位
 
 ## 🎨 界面设计
@@ -139,12 +166,14 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 - **Fluent 图标** - 使用 Segoe Fluent Icons
 - **卡片布局** - 信息卡片组织方式
 - **动画效果** - 流畅的过渡动画
-- **深色主题** - 默认深色配色方案
+- **主题系统** - 支持深色/浅色主题切换
+- **选项卡导航** - 4个功能页面：性能概览、进程、磁盘、设置
+- **系统托盘** - 最小化到托盘，双击托盘图标恢复窗口
 
 ## 🔧 配置
 
 ### 修改性能数据刷新间隔
-在 `MainWindow.xaml.cs:139-144` 中修改:
+在 `MainWindow.xaml.cs:160-165` 中修改:
 ```csharp
 _performanceTimer = new DispatcherTimer
 {
@@ -153,7 +182,7 @@ _performanceTimer = new DispatcherTimer
 ```
 
 ### 修改进程列表刷新间隔
-在 `MainWindow.xaml.cs:147-152` 中修改:
+在 `MainWindow.xaml.cs:168-173` 中修改:
 ```csharp
 _processTimer = new DispatcherTimer
 {
@@ -161,14 +190,23 @@ _processTimer = new DispatcherTimer
 };
 ```
 
+### 修改磁盘信息刷新间隔
+在 `MainWindow.xaml.cs:176-181` 中修改:
+```csharp
+_diskTimer = new DispatcherTimer
+{
+    Interval = TimeSpan.FromSeconds(5) // 修改此值（秒）
+};
+```
+
 ### 修改图表历史数据长度
-在 `MainWindow.xaml.cs:27` 中修改:
+在 `MainWindow.xaml.cs:32` 中修改:
 ```csharp
 private const int MaxDataPoints = 60; // 修改此值（数据点数量）
 ```
 
 ### 修改进程列表显示数量
-在 `MainWindow.xaml.cs:202` 中修改:
+在 `MainWindow.xaml.cs:231` 中修改:
 ```csharp
 var processes = _processMonitor.GetTopProcesses(15); // 修改此值
 ```
@@ -179,18 +217,19 @@ var processes = _processMonitor.GetTopProcesses(15); // 修改此值
 - [x] 添加多核 CPU 监测
 - [x] 添加详细的内存信息
 - [x] 提高刷新频率到 1 秒
+- [x] 添加进程结束功能
+- [x] 添加磁盘详细信息（各分区使用情况）
+- [x] 添加系统托盘支持
+- [x] 添加深色/浅色主题切换
 - [ ] 添加 GPU 监测功能
 - [ ] 添加温度监测
-- [ ] 添加进程结束功能
-- [ ] 添加磁盘详细信息（各分区使用情况）
 - [ ] 添加启动项管理
-- [ ] 添加自启动功能
-- [ ] 添加系统托盘支持
+- [ ] 添加开机自启动功能
 - [ ] 添加数据导出功能（CSV/JSON）
 - [ ] 添加性能警报功能
-- [ ] 添加自定义主题
 - [ ] 添加多语言支持（英文/中文）
-- [ ] 添加深色/浅色主题切换
+- [ ] 添加性能历史记录
+- [ ] 添加 CPU 核心单独监控页面
 
 ## 🤝 贡献
 
@@ -204,6 +243,7 @@ var processes = _processMonitor.GetTopProcesses(15); // 修改此值
 
 - [WPF-UI](https://github.com/lepoco/wpfui) - 优秀的 Fluent Design WPF 组件库
 - [LiveCharts2](https://livecharts.dev/) - 强大的图表库
+- [Hardcodet.NotifyIcon.Wpf](https://github.com/hardcodet/wpf-notifyicon) - 系统托盘支持
 - Microsoft Fluent Design System
 
 ---

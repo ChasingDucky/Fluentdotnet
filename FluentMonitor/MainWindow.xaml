@@ -105,7 +105,7 @@
                             </ui:Card>
 
                             <!-- Quick Stats Cards -->
-                            <Grid Grid.Row="1" Margin="0,0,0,15">
+                            <Grid Grid.Row="1" Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
@@ -114,7 +114,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!-- CPU Card -->
-                                <ui:Card Grid.Column="0" Margin="0,0,7.5,0" Padding="20">
+                                <ui:Card Grid.Column="0" Margin="0,0,10,0" Padding="25">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -122,36 +122,36 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                            <ui:SymbolIcon Symbol="Memories24" FontSize="20" Margin="0,0,8,0"/>
-                                            <TextBlock Text="CPU" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                                            <ui:SymbolIcon Symbol="Memories24" FontSize="24" Margin="0,0,10,0"/>
+                                            <TextBlock Text="CPU" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                        <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,10,0,10">
                                             <TextBlock x:Name="CpuUsageText"
                                                        Text="0%"
-                                                       FontSize="42"
+                                                       FontSize="48"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Center"
-                                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
+                                                       Foreground="#0078D4"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2">
                                             <TextBlock x:Name="CpuSpeedText"
                                                        Text="速度: 0.0 GHz"
-                                                       FontSize="11"
+                                                       FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Margin="0,0,0,2"/>
+                                                       Margin="0,0,0,3"/>
                                             <TextBlock x:Name="CpuCoresText"
                                                        Text="核心: 0 / 逻辑: 0"
-                                                       FontSize="11"
+                                                       FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                         </StackPanel>
                                     </Grid>
                                 </ui:Card>
 
                                 <!-- Memory Card -->
-                                <ui:Card Grid.Column="1" Margin="7.5,0,7.5,0" Padding="20">
+                                <ui:Card Grid.Column="1" Margin="10,0,10,0" Padding="25">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -159,41 +159,41 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                            <ui:SymbolIcon Symbol="Server24" FontSize="20" Margin="0,0,8,0"/>
-                                            <TextBlock Text="内存" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                                            <ui:SymbolIcon Symbol="Server24" FontSize="24" Margin="0,0,10,0"/>
+                                            <TextBlock Text="内存" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                        <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,10,0,10">
                                             <TextBlock x:Name="MemoryUsageText"
                                                        Text="0%"
-                                                       FontSize="42"
+                                                       FontSize="48"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Center"
-                                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
+                                                       Foreground="#10893E"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2">
                                             <TextBlock x:Name="MemoryDetailsText"
                                                        Text="已用: 0 GB / 0 GB"
-                                                       FontSize="11"
+                                                       FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Margin="0,0,0,2"/>
+                                                       Margin="0,0,0,3"/>
                                             <TextBlock x:Name="MemoryCommittedText"
                                                        Text="已提交: 0 GB"
-                                                       FontSize="11"
+                                                       FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Margin="0,0,0,2"/>
+                                                       Margin="0,0,0,3"/>
                                             <TextBlock x:Name="MemoryCachedText"
                                                        Text="已缓存: 0 GB"
-                                                       FontSize="11"
+                                                       FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                         </StackPanel>
                                     </Grid>
                                 </ui:Card>
 
                                 <!-- Disk Card -->
-                                <ui:Card Grid.Column="2" Margin="7.5,0,7.5,0" Padding="20">
+                                <ui:Card Grid.Column="2" Margin="10,0,10,0" Padding="25">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -201,36 +201,36 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                            <ui:SymbolIcon Symbol="SaveMultiple24" FontSize="20" Margin="0,0,8,0"/>
-                                            <TextBlock Text="磁盘" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                                            <ui:SymbolIcon Symbol="SaveMultiple24" FontSize="24" Margin="0,0,10,0"/>
+                                            <TextBlock Text="磁盘" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                        <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,10,0,10">
                                             <TextBlock x:Name="DiskActiveTimeText"
                                                        Text="0%"
-                                                       FontSize="42"
+                                                       FontSize="48"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Center"
-                                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
+                                                       Foreground="#FF8C00"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2">
                                             <TextBlock x:Name="DiskReadText"
                                                        Text="读取: 0 MB/s"
-                                                       FontSize="11"
+                                                       FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Margin="0,0,0,2"/>
+                                                       Margin="0,0,0,3"/>
                                             <TextBlock x:Name="DiskWriteText"
                                                        Text="写入: 0 MB/s"
-                                                       FontSize="11"
+                                                       FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                         </StackPanel>
                                     </Grid>
                                 </ui:Card>
 
                                 <!-- Network Card -->
-                                <ui:Card Grid.Column="3" Margin="7.5,0,0,0" Padding="20">
+                                <ui:Card Grid.Column="3" Margin="10,0,0,0" Padding="25">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -238,29 +238,29 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                            <ui:SymbolIcon Symbol="Wifi124" FontSize="20" Margin="0,0,8,0"/>
-                                            <TextBlock Text="网络" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                                            <ui:SymbolIcon Symbol="Wifi124" FontSize="24" Margin="0,0,10,0"/>
+                                            <TextBlock Text="网络" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                                        <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,10,0,10">
                                             <TextBlock x:Name="NetworkTotalText"
                                                        Text="0 KB/s"
-                                                       FontSize="36"
+                                                       FontSize="42"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Center"
-                                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
+                                                       Foreground="#8B4513"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2">
                                             <TextBlock x:Name="NetworkSentText"
                                                        Text="↑ 发送: 0 KB/s"
-                                                       FontSize="11"
+                                                       FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Margin="0,0,0,2"/>
+                                                       Margin="0,0,0,3"/>
                                             <TextBlock x:Name="NetworkReceivedText"
                                                        Text="↓ 接收: 0 KB/s"
-                                                       FontSize="11"
+                                                       FontSize="12"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                         </StackPanel>
                                     </Grid>
@@ -279,7 +279,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!-- CPU Chart -->
-                                <ui:Card Grid.Row="0" Grid.Column="0" Margin="0,0,7.5,7.5" Padding="15">
+                                <ui:Card Grid.Row="0" Grid.Column="0" Margin="0,0,10,10" Padding="20">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -289,7 +289,7 @@
                                                    Text="CPU 使用率历史 (60秒)"
                                                    FontSize="16"
                                                    FontWeight="SemiBold"
-                                                   Margin="0,0,0,10"/>
+                                                   Margin="0,0,0,15"/>
                                         <lvc:CartesianChart Grid.Row="1"
                                                             x:Name="CpuChart"
                                                             LegendPosition="Hidden"/>
@@ -297,7 +297,7 @@
                                 </ui:Card>
 
                                 <!-- Memory Chart -->
-                                <ui:Card Grid.Row="0" Grid.Column="1" Margin="7.5,0,0,7.5" Padding="15">
+                                <ui:Card Grid.Row="0" Grid.Column="1" Margin="10,0,0,10" Padding="20">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -307,7 +307,7 @@
                                                    Text="内存使用率历史 (60秒)"
                                                    FontSize="16"
                                                    FontWeight="SemiBold"
-                                                   Margin="0,0,0,10"/>
+                                                   Margin="0,0,0,15"/>
                                         <lvc:CartesianChart Grid.Row="1"
                                                             x:Name="MemoryChart"
                                                             LegendPosition="Hidden"/>
@@ -315,7 +315,7 @@
                                 </ui:Card>
 
                                 <!-- Disk Chart -->
-                                <ui:Card Grid.Row="1" Grid.Column="0" Margin="0,7.5,7.5,0" Padding="15">
+                                <ui:Card Grid.Row="1" Grid.Column="0" Margin="0,10,10,0" Padding="20">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -325,7 +325,7 @@
                                                    Text="磁盘活动 (MB/s)"
                                                    FontSize="16"
                                                    FontWeight="SemiBold"
-                                                   Margin="0,0,0,10"/>
+                                                   Margin="0,0,0,15"/>
                                         <lvc:CartesianChart Grid.Row="1"
                                                             x:Name="DiskChart"
                                                             LegendPosition="Bottom"/>
@@ -333,7 +333,7 @@
                                 </ui:Card>
 
                                 <!-- Network Chart -->
-                                <ui:Card Grid.Row="1" Grid.Column="1" Margin="7.5,7.5,0,0" Padding="15">
+                                <ui:Card Grid.Row="1" Grid.Column="1" Margin="10,10,0,0" Padding="20">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -343,7 +343,7 @@
                                                    Text="网络活动 (KB/s)"
                                                    FontSize="16"
                                                    FontWeight="SemiBold"
-                                                   Margin="0,0,0,10"/>
+                                                   Margin="0,0,0,15"/>
                                         <lvc:CartesianChart Grid.Row="1"
                                                             x:Name="NetworkChart"
                                                             LegendPosition="Bottom"/>
@@ -372,86 +372,159 @@
                                            Margin="0,0,0,20"/>
 
                                 <!-- Device Recommendations Panel -->
-                                <StackPanel x:Name="DeviceRecommendationsPanel" Visibility="Collapsed" Margin="0,0,0,20">
-                                    <Grid Margin="0,0,0,10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <ui:SymbolIcon Grid.Column="0" Symbol="Warning24" FontSize="24" Foreground="#FF8C00" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                                        <TextBlock Grid.Column="1" Text="设备升级建议"
-                                                   FontSize="20"
-                                                   FontWeight="Bold"
-                                                   Foreground="#FF8C00"
-                                                   VerticalAlignment="Center"/>
-                                    </Grid>
+                                <StackPanel x:Name="DeviceRecommendationsPanel" Visibility="Collapsed" Margin="0,0,0,30">
+                                    <!-- Warning Header Card -->
+                                    <ui:Card Padding="20" Margin="0,0,0,15" Background="#FFF4E5" BorderBrush="#FF8C00" BorderThickness="2">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <ui:SymbolIcon Grid.Column="0"
+                                                          Symbol="Warning24"
+                                                          FontSize="32"
+                                                          Foreground="#FF8C00"
+                                                          Margin="0,0,15,0"
+                                                          VerticalAlignment="Center"/>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="⚠️ 设备升级建议"
+                                                          FontSize="22"
+                                                          FontWeight="Bold"
+                                                          Foreground="#FF8C00"/>
+                                                <TextBlock Text="检测到以下设备可能需要升级或维护"
+                                                          FontSize="13"
+                                                          Foreground="#8B5A00"
+                                                          Margin="0,3,0,0"/>
+                                            </StackPanel>
+                                            <ui:SymbolIcon Grid.Column="2"
+                                                          Symbol="ChevronDown24"
+                                                          FontSize="24"
+                                                          Foreground="#FF8C00"
+                                                          VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </ui:Card>
 
                                     <ItemsControl x:Name="DeviceRecommendationsItemsControl">
                                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <ui:Card Margin="0,0,0,15" Padding="20" BorderBrush="#FF8C00" BorderThickness="2">
+                                                <ui:Card Margin="0,0,0,20" Padding="25" BorderBrush="#FFB84D" BorderThickness="1">
                                                     <StackPanel>
                                                         <!-- Header -->
-                                                        <Grid Margin="0,0,0,15">
+                                                        <Grid Margin="0,0,0,20">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="Auto"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <ui:SymbolIcon Grid.Column="0" Symbol="Info24" FontSize="32" Margin="0,0,15,0" Foreground="#FF8C00"/>
+                                                            <ui:SymbolIcon Grid.Column="0"
+                                                                          Symbol="Info24"
+                                                                          FontSize="36"
+                                                                          Margin="0,0,20,0"
+                                                                          Foreground="#FF8C00"/>
                                                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                                                <TextBlock Text="{Binding DeviceType}" FontSize="16" FontWeight="Bold"/>
-                                                                <TextBlock Text="{Binding DeviceName}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                <TextBlock Text="{Binding DeviceType}"
+                                                                          FontSize="18"
+                                                                          FontWeight="Bold"/>
+                                                                <TextBlock Text="{Binding DeviceName}"
+                                                                          FontSize="14"
+                                                                          Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                                          Margin="0,3,0,0"/>
                                                             </StackPanel>
-                                                            <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
-                                                                <TextBlock Text="{Binding Age}" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="#FF8C00"/>
-                                                                <TextBlock Text="设备年代" FontSize="10" Foreground="{DynamicResource TextFillColorSecondaryBrush}" HorizontalAlignment="Right"/>
-                                                            </StackPanel>
+                                                            <ui:Card Grid.Column="2"
+                                                                    VerticalAlignment="Center"
+                                                                    Padding="12,8"
+                                                                    Background="#FFE8CC"
+                                                                    BorderBrush="#FF8C00"
+                                                                    BorderThickness="1">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="{Binding Age}"
+                                                                              FontSize="14"
+                                                                              FontWeight="Bold"
+                                                                              HorizontalAlignment="Center"
+                                                                              Foreground="#FF8C00"/>
+                                                                    <TextBlock Text="设备年代"
+                                                                              FontSize="10"
+                                                                              Foreground="#8B5A00"
+                                                                              HorizontalAlignment="Center"
+                                                                              Margin="0,2,0,0"/>
+                                                                </StackPanel>
+                                                            </ui:Card>
                                                         </Grid>
 
                                                         <!-- Recommendation -->
-                                                        <ui:Card Padding="15" Margin="0,0,0,15" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}">
-                                                            <StackPanel>
-                                                                <TextBlock Text="💡 建议" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                                                <TextBlock Text="{Binding Recommendation}" TextWrapping="Wrap" FontSize="13"/>
+                                                        <ui:Card Padding="18" Margin="0,0,0,20" Background="#F5F5F5">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="💡"
+                                                                          FontSize="20"
+                                                                          Margin="0,0,10,0"
+                                                                          VerticalAlignment="Top"/>
+                                                                <StackPanel>
+                                                                    <TextBlock Text="建议"
+                                                                              FontSize="15"
+                                                                              FontWeight="SemiBold"
+                                                                              Margin="0,0,0,6"/>
+                                                                    <TextBlock Text="{Binding Recommendation}"
+                                                                              TextWrapping="Wrap"
+                                                                              FontSize="14"
+                                                                              LineHeight="22"/>
+                                                                </StackPanel>
                                                             </StackPanel>
                                                         </ui:Card>
 
                                                         <!-- Pricing Grid -->
-                                                        <Grid>
+                                                        <Grid Margin="0,0,0,20">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="10"/>
+                                                                <ColumnDefinition Width="15"/>
                                                                 <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="10"/>
+                                                                <ColumnDefinition Width="15"/>
                                                                 <ColumnDefinition Width="*"/>
                                                             </Grid.ColumnDefinitions>
 
                                                             <!-- Estimated Value -->
-                                                            <ui:Card Grid.Column="0" Padding="15">
+                                                            <ui:Card Grid.Column="0" Padding="18" Background="#E3F2FD" BorderBrush="#0078D4" BorderThickness="1">
                                                                 <StackPanel>
-                                                                    <TextBlock Text="💰 估值" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                                                    <TextBlock FontSize="20" FontWeight="Bold" Foreground="#0078D4">
+                                                                    <TextBlock Text="💰 市场估值"
+                                                                              FontSize="12"
+                                                                              Foreground="#005A9E"
+                                                                              Margin="0,0,0,8"/>
+                                                                    <TextBlock FontSize="24"
+                                                                              FontWeight="Bold"
+                                                                              Foreground="#0078D4"
+                                                                              HorizontalAlignment="Center">
                                                                         <Run Text="¥"/><Run Text="{Binding EstimatedValue}"/>
                                                                     </TextBlock>
                                                                 </StackPanel>
                                                             </ui:Card>
 
                                                             <!-- Recycle Value -->
-                                                            <ui:Card Grid.Column="2" Padding="15">
+                                                            <ui:Card Grid.Column="2" Padding="18" Background="#E8F5E9" BorderBrush="#10893E" BorderThickness="1">
                                                                 <StackPanel>
-                                                                    <TextBlock Text="♻️ 回收价" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                                                    <TextBlock FontSize="20" FontWeight="Bold" Foreground="#10893E">
+                                                                    <TextBlock Text="♻️ 回收价格"
+                                                                              FontSize="12"
+                                                                              Foreground="#0D6930"
+                                                                              Margin="0,0,0,8"/>
+                                                                    <TextBlock FontSize="24"
+                                                                              FontWeight="Bold"
+                                                                              Foreground="#10893E"
+                                                                              HorizontalAlignment="Center">
                                                                         <Run Text="¥"/><Run Text="{Binding RecycleValue}"/>
                                                                     </TextBlock>
                                                                 </StackPanel>
                                                             </ui:Card>
 
                                                             <!-- Upgrade Cost -->
-                                                            <ui:Card Grid.Column="4" Padding="15" x:Name="UpgradeCostCard">
+                                                            <ui:Card Grid.Column="4" Padding="18" Background="#FFF4E5" BorderBrush="#FF8C00" BorderThickness="1" x:Name="UpgradeCostCard">
                                                                 <StackPanel>
-                                                                    <TextBlock Text="🚀 升级成本" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                                                    <TextBlock FontSize="20" FontWeight="Bold" Foreground="#FF8C00">
+                                                                    <TextBlock Text="🚀 升级成本"
+                                                                              FontSize="12"
+                                                                              Foreground="#8B5A00"
+                                                                              Margin="0,0,0,8"/>
+                                                                    <TextBlock FontSize="24"
+                                                                              FontWeight="Bold"
+                                                                              Foreground="#FF8C00"
+                                                                              HorizontalAlignment="Center">
                                                                         <Run Text="¥"/><Run Text="{Binding UpgradeOption.EstimatedCost}"/>
                                                                     </TextBlock>
                                                                 </StackPanel>
@@ -459,73 +532,131 @@
                                                         </Grid>
 
                                                         <!-- Repair Options -->
-                                                        <Grid Margin="0,15,0,0" x:Name="RepairOptionsGrid">
+                                                        <Grid Margin="0,0,0,20" x:Name="RepairOptionsGrid">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="10"/>
+                                                                <ColumnDefinition Width="15"/>
                                                                 <ColumnDefinition Width="*"/>
                                                             </Grid.ColumnDefinitions>
 
                                                             <!-- Official Repair -->
-                                                            <ui:Card Grid.Column="0" Padding="15">
+                                                            <ui:Card Grid.Column="0" Padding="18" BorderBrush="#E0E0E0" BorderThickness="1">
                                                                 <StackPanel>
-                                                                    <TextBlock Text="{Binding OfficialRepair.Provider}" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                                                                    <TextBlock Text="{Binding OfficialRepair.Provider}"
+                                                                              FontSize="15"
+                                                                              FontWeight="Bold"
+                                                                              Margin="0,0,0,12"/>
                                                                     <Grid>
                                                                         <Grid.ColumnDefinitions>
                                                                             <ColumnDefinition Width="*"/>
                                                                             <ColumnDefinition Width="*"/>
                                                                         </Grid.ColumnDefinitions>
                                                                         <StackPanel Grid.Column="0">
-                                                                            <TextBlock Text="维修费用" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                                                            <TextBlock FontSize="16" FontWeight="SemiBold">
+                                                                            <TextBlock Text="维修费用"
+                                                                                      FontSize="11"
+                                                                                      Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                                                      Margin="0,0,0,4"/>
+                                                                            <TextBlock FontSize="18"
+                                                                                      FontWeight="Bold"
+                                                                                      Foreground="#0078D4">
                                                                                 <Run Text="¥"/><Run Text="{Binding OfficialRepair.RepairCost}"/>
                                                                             </TextBlock>
                                                                         </StackPanel>
                                                                         <StackPanel Grid.Column="1">
-                                                                            <TextBlock Text="换新费用" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                                                            <TextBlock FontSize="16" FontWeight="SemiBold">
+                                                                            <TextBlock Text="换新费用"
+                                                                                      FontSize="11"
+                                                                                      Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                                                      Margin="0,0,0,4"/>
+                                                                            <TextBlock FontSize="18"
+                                                                                      FontWeight="Bold"
+                                                                                      Foreground="#10893E">
                                                                                 <Run Text="¥"/><Run Text="{Binding OfficialRepair.ReplacementCost}"/>
                                                                             </TextBlock>
                                                                         </StackPanel>
                                                                     </Grid>
-                                                                    <TextBlock Text="{Binding OfficialRepair.Note}" TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,5,0,0"/>
+                                                                    <TextBlock Text="{Binding OfficialRepair.Note}"
+                                                                              TextWrapping="Wrap"
+                                                                              FontSize="12"
+                                                                              Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                                              Margin="0,10,0,0"/>
                                                                 </StackPanel>
                                                             </ui:Card>
 
                                                             <!-- Market Repair -->
-                                                            <ui:Card Grid.Column="2" Padding="15">
+                                                            <ui:Card Grid.Column="2" Padding="18" BorderBrush="#E0E0E0" BorderThickness="1">
                                                                 <StackPanel>
-                                                                    <TextBlock Text="{Binding MarketRepair.Provider}" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                                                                    <TextBlock Text="{Binding MarketRepair.Provider}"
+                                                                              FontSize="15"
+                                                                              FontWeight="Bold"
+                                                                              Margin="0,0,0,12"/>
                                                                     <Grid>
                                                                         <Grid.ColumnDefinitions>
                                                                             <ColumnDefinition Width="*"/>
                                                                             <ColumnDefinition Width="*"/>
                                                                         </Grid.ColumnDefinitions>
                                                                         <StackPanel Grid.Column="0">
-                                                                            <TextBlock Text="维修费用" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                                                            <TextBlock FontSize="16" FontWeight="SemiBold">
+                                                                            <TextBlock Text="维修费用"
+                                                                                      FontSize="11"
+                                                                                      Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                                                      Margin="0,0,0,4"/>
+                                                                            <TextBlock FontSize="18"
+                                                                                      FontWeight="Bold"
+                                                                                      Foreground="#0078D4">
                                                                                 <Run Text="¥"/><Run Text="{Binding MarketRepair.RepairCost}"/>
                                                                             </TextBlock>
                                                                         </StackPanel>
                                                                         <StackPanel Grid.Column="1">
-                                                                            <TextBlock Text="换新费用" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                                                            <TextBlock FontSize="16" FontWeight="SemiBold">
+                                                                            <TextBlock Text="换新费用"
+                                                                                      FontSize="11"
+                                                                                      Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                                                      Margin="0,0,0,4"/>
+                                                                            <TextBlock FontSize="18"
+                                                                                      FontWeight="Bold"
+                                                                                      Foreground="#10893E">
                                                                                 <Run Text="¥"/><Run Text="{Binding MarketRepair.ReplacementCost}"/>
                                                                             </TextBlock>
                                                                         </StackPanel>
                                                                     </Grid>
-                                                                    <TextBlock Text="{Binding MarketRepair.Note}" TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,5,0,0"/>
+                                                                    <TextBlock Text="{Binding MarketRepair.Note}"
+                                                                              TextWrapping="Wrap"
+                                                                              FontSize="12"
+                                                                              Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                                              Margin="0,10,0,0"/>
                                                                 </StackPanel>
                                                             </ui:Card>
                                                         </Grid>
 
                                                         <!-- Upgrade Recommendation -->
-                                                        <ui:Card Padding="15" Margin="0,15,0,0" Background="#0078D4" x:Name="UpgradeRecommendationCard">
-                                                            <StackPanel>
-                                                                <TextBlock Text="🎯 升级推荐" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,5"/>
-                                                                <TextBlock Text="{Binding UpgradeOption.RecommendedModel}" FontSize="16" FontWeight="Bold" Foreground="White" Margin="0,0,0,5"/>
-                                                                <TextBlock Text="{Binding UpgradeOption.Benefit}" TextWrapping="Wrap" FontSize="12" Foreground="White" Opacity="0.9"/>
-                                                            </StackPanel>
+                                                        <ui:Card Padding="22" Margin="0,0,0,0" Background="#0078D4" BorderBrush="#005A9E" BorderThickness="1" x:Name="UpgradeRecommendationCard">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Grid.Column="0"
+                                                                          Text="🎯"
+                                                                          FontSize="32"
+                                                                          Margin="0,0,15,0"
+                                                                          VerticalAlignment="Top"/>
+                                                                <StackPanel Grid.Column="1">
+                                                                    <TextBlock Text="推荐升级方案"
+                                                                              FontSize="16"
+                                                                              FontWeight="Bold"
+                                                                              Foreground="White"
+                                                                              Margin="0,0,0,8"/>
+                                                                    <TextBlock Text="{Binding UpgradeOption.RecommendedModel}"
+                                                                              FontSize="18"
+                                                                              FontWeight="Bold"
+                                                                              Foreground="White"
+                                                                              Margin="0,0,0,8"/>
+                                                                    <TextBlock Text="{Binding UpgradeOption.Benefit}"
+                                                                              TextWrapping="Wrap"
+                                                                              FontSize="14"
+                                                                              Foreground="White"
+                                                                              Opacity="0.95"
+                                                                              LineHeight="22"/>
+                                                                </StackPanel>
+                                                            </Grid>
                                                         </ui:Card>
                                                     </StackPanel>
                                                 </ui:Card>
@@ -1539,7 +1670,7 @@
                                 <ui:Card Padding="20">
                                     <StackPanel>
                                         <TextBlock Text="关于" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                                        <TextBlock Text="Fluent Monitor v1.4" FontSize="14" Margin="0,0,0,5"/>
+                                        <TextBlock Text="Fluent Monitor v1.5" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                         <TextBlock Text="基于 Microsoft Fluent Design 的系统性能监测工具"
                                                    FontSize="12"
                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"

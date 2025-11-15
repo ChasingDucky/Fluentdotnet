@@ -371,6 +371,169 @@
                                            FontWeight="Bold"
                                            Margin="0,0,0,20"/>
 
+                                <!-- Device Recommendations Panel -->
+                                <StackPanel x:Name="DeviceRecommendationsPanel" Visibility="Collapsed" Margin="0,0,0,20">
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ui:SymbolIcon Grid.Column="0" Symbol="Warning24" FontSize="24" Foreground="#FF8C00" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" Text="设备升级建议"
+                                                   FontSize="20"
+                                                   FontWeight="Bold"
+                                                   Foreground="#FF8C00"
+                                                   VerticalAlignment="Center"/>
+                                    </Grid>
+
+                                    <ItemsControl x:Name="DeviceRecommendationsItemsControl">
+                                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <ui:Card Margin="0,0,0,15" Padding="20" BorderBrush="#FF8C00" BorderThickness="2">
+                                                    <StackPanel>
+                                                        <!-- Header -->
+                                                        <Grid Margin="0,0,0,15">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <ui:SymbolIcon Grid.Column="0" Symbol="Info24" FontSize="32" Margin="0,0,15,0" Foreground="#FF8C00"/>
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding DeviceType}" FontSize="16" FontWeight="Bold"/>
+                                                                <TextBlock Text="{Binding DeviceName}" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                                                <TextBlock Text="{Binding Age}" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="#FF8C00"/>
+                                                                <TextBlock Text="设备年代" FontSize="10" Foreground="{DynamicResource TextFillColorSecondaryBrush}" HorizontalAlignment="Right"/>
+                                                            </StackPanel>
+                                                        </Grid>
+
+                                                        <!-- Recommendation -->
+                                                        <ui:Card Padding="15" Margin="0,0,0,15" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}">
+                                                            <StackPanel>
+                                                                <TextBlock Text="💡 建议" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                                                <TextBlock Text="{Binding Recommendation}" TextWrapping="Wrap" FontSize="13"/>
+                                                            </StackPanel>
+                                                        </ui:Card>
+
+                                                        <!-- Pricing Grid -->
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="10"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="10"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <!-- Estimated Value -->
+                                                            <ui:Card Grid.Column="0" Padding="15">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="💰 估值" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                    <TextBlock FontSize="20" FontWeight="Bold" Foreground="#0078D4">
+                                                                        <Run Text="¥"/><Run Text="{Binding EstimatedValue}"/>
+                                                                    </TextBlock>
+                                                                </StackPanel>
+                                                            </ui:Card>
+
+                                                            <!-- Recycle Value -->
+                                                            <ui:Card Grid.Column="2" Padding="15">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="♻️ 回收价" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                    <TextBlock FontSize="20" FontWeight="Bold" Foreground="#10893E">
+                                                                        <Run Text="¥"/><Run Text="{Binding RecycleValue}"/>
+                                                                    </TextBlock>
+                                                                </StackPanel>
+                                                            </ui:Card>
+
+                                                            <!-- Upgrade Cost -->
+                                                            <ui:Card Grid.Column="4" Padding="15" x:Name="UpgradeCostCard">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="🚀 升级成本" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                    <TextBlock FontSize="20" FontWeight="Bold" Foreground="#FF8C00">
+                                                                        <Run Text="¥"/><Run Text="{Binding UpgradeOption.EstimatedCost}"/>
+                                                                    </TextBlock>
+                                                                </StackPanel>
+                                                            </ui:Card>
+                                                        </Grid>
+
+                                                        <!-- Repair Options -->
+                                                        <Grid Margin="0,15,0,0" x:Name="RepairOptionsGrid">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="10"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <!-- Official Repair -->
+                                                            <ui:Card Grid.Column="0" Padding="15">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="{Binding OfficialRepair.Provider}" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                                                                    <Grid>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="*"/>
+                                                                            <ColumnDefinition Width="*"/>
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <StackPanel Grid.Column="0">
+                                                                            <TextBlock Text="维修费用" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                            <TextBlock FontSize="16" FontWeight="SemiBold">
+                                                                                <Run Text="¥"/><Run Text="{Binding OfficialRepair.RepairCost}"/>
+                                                                            </TextBlock>
+                                                                        </StackPanel>
+                                                                        <StackPanel Grid.Column="1">
+                                                                            <TextBlock Text="换新费用" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                            <TextBlock FontSize="16" FontWeight="SemiBold">
+                                                                                <Run Text="¥"/><Run Text="{Binding OfficialRepair.ReplacementCost}"/>
+                                                                            </TextBlock>
+                                                                        </StackPanel>
+                                                                    </Grid>
+                                                                    <TextBlock Text="{Binding OfficialRepair.Note}" TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,5,0,0"/>
+                                                                </StackPanel>
+                                                            </ui:Card>
+
+                                                            <!-- Market Repair -->
+                                                            <ui:Card Grid.Column="2" Padding="15">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="{Binding MarketRepair.Provider}" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                                                                    <Grid>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="*"/>
+                                                                            <ColumnDefinition Width="*"/>
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <StackPanel Grid.Column="0">
+                                                                            <TextBlock Text="维修费用" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                            <TextBlock FontSize="16" FontWeight="SemiBold">
+                                                                                <Run Text="¥"/><Run Text="{Binding MarketRepair.RepairCost}"/>
+                                                                            </TextBlock>
+                                                                        </StackPanel>
+                                                                        <StackPanel Grid.Column="1">
+                                                                            <TextBlock Text="换新费用" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                            <TextBlock FontSize="16" FontWeight="SemiBold">
+                                                                                <Run Text="¥"/><Run Text="{Binding MarketRepair.ReplacementCost}"/>
+                                                                            </TextBlock>
+                                                                        </StackPanel>
+                                                                    </Grid>
+                                                                    <TextBlock Text="{Binding MarketRepair.Note}" TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,5,0,0"/>
+                                                                </StackPanel>
+                                                            </ui:Card>
+                                                        </Grid>
+
+                                                        <!-- Upgrade Recommendation -->
+                                                        <ui:Card Padding="15" Margin="0,15,0,0" Background="#0078D4" x:Name="UpgradeRecommendationCard">
+                                                            <StackPanel>
+                                                                <TextBlock Text="🎯 升级推荐" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,5"/>
+                                                                <TextBlock Text="{Binding UpgradeOption.RecommendedModel}" FontSize="16" FontWeight="Bold" Foreground="White" Margin="0,0,0,5"/>
+                                                                <TextBlock Text="{Binding UpgradeOption.Benefit}" TextWrapping="Wrap" FontSize="12" Foreground="White" Opacity="0.9"/>
+                                                            </StackPanel>
+                                                        </ui:Card>
+                                                    </StackPanel>
+                                                </ui:Card>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+
                                 <!-- CPU Hardware Info -->
                                 <TextBlock Text="处理器 (CPU)"
                                            FontSize="18"

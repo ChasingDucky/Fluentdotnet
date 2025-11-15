@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -21,6 +22,7 @@ namespace FluentMonitor
         private readonly HardwareInfoService _hardwareInfoService;
         private readonly BenchmarkService _benchmarkService;
         private readonly TrayIconService _trayIconService;
+        private readonly DeviceValuationService _deviceValuationService;
         private readonly DispatcherTimer _performanceTimer;
         private readonly DispatcherTimer _processTimer;
         private readonly DispatcherTimer _diskTimer;
@@ -57,6 +59,7 @@ namespace FluentMonitor
             _hardwareInfoService = new HardwareInfoService();
             _benchmarkService = new BenchmarkService();
             _trayIconService = new TrayIconService();
+            _deviceValuationService = new DeviceValuationService();
 
             InitializeCharts();
             InitializeTimers();
@@ -153,10 +156,53 @@ namespace FluentMonitor
                     OsInstallDate.Text = osInfo.InstallDate;
                     OsSystemDirectory.Text = osInfo.SystemDirectory;
                 }
+
+                // Evaluate device age and recommendations
+                LoadDeviceRecommendations(cpuInfo, memoryInfo);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error loading hardware info: {ex.Message}");
+            }
+        }
+
+        private void LoadDeviceRecommendations(System.Collections.Generic.List<dynamic>? cpuInfo, System.Collections.Generic.List<dynamic>? memoryInfo)
+        {
+            var recommendations = new System.Collections.Generic.List<DeviceRecommendation>();
+
+            // Evaluate CPU
+            if (cpuInfo != null && cpuInfo.Count > 0)
+            {
+                var cpu = cpuInfo[0];
+                var recommendation = _deviceValuationService.EvaluateCpu(cpu.Name);
+                if (recommendation != null)
+                {
+                    recommendations.Add(recommendation);
+                }
+            }
+
+            // Evaluate Memory
+            if (memoryInfo != null && memoryInfo.Count > 0)
+            {
+                var memory = memoryInfo[0];
+                var recommendation = _deviceValuationService.EvaluateMemory(memory.Speed, memory.Capacity / 1024 / 1024 / 1024);
+                if (recommendation != null)
+                {
+                    recommendations.Add(recommendation);
+                }
+            }
+
+            // Display recommendations
+            DeviceRecommendationsItemsControl.ItemsSource = recommendations;
+
+            // Show/hide recommendation panel
+            if (recommendations.Count > 0 && recommendations.Any(r => r.Level >= RecommendationLevel.Consider))
+            {
+                DeviceRecommendationsPanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                DeviceRecommendationsPanel.Visibility = Visibility.Collapsed;
             }
         }
 

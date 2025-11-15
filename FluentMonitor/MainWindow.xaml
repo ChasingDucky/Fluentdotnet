@@ -58,7 +58,7 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Symbol="ChartMultiple24" Margin="0,0,8,0"/>
+                            <ui:SymbolIcon Symbol="Chart24" Margin="0,0,8,0"/>
                             <TextBlock Text="性能概览" FontSize="14"/>
                         </StackPanel>
                     </TabItem.Header>
@@ -122,7 +122,7 @@
                                         </Grid.RowDefinitions>
 
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
-                                            <ui:SymbolIcon Symbol="Memories24" FontSize="24" Margin="0,0,10,0"/>
+                                            <ui:SymbolIcon Symbol="Chip24" FontSize="24" Margin="0,0,10,0"/>
                                             <TextBlock Text="CPU" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
@@ -201,7 +201,7 @@
                                         </Grid.RowDefinitions>
 
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
-                                            <ui:SymbolIcon Symbol="SaveMultiple24" FontSize="24" Margin="0,0,10,0"/>
+                                            <ui:SymbolIcon Symbol="Storage24" FontSize="24" Margin="0,0,10,0"/>
                                             <TextBlock Text="磁盘" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
@@ -238,7 +238,7 @@
                                         </Grid.RowDefinitions>
 
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
-                                            <ui:SymbolIcon Symbol="Wifi124" FontSize="24" Margin="0,0,10,0"/>
+                                            <ui:SymbolIcon Symbol="Wifi24" FontSize="24" Margin="0,0,10,0"/>
                                             <TextBlock Text="网络" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                         </StackPanel>
 
@@ -686,7 +686,7 @@
                                                     </Grid.RowDefinitions>
 
                                                     <ui:SymbolIcon Grid.Column="0" Grid.RowSpan="4"
-                                                                   Symbol="DatabaseStack24"
+                                                                   Symbol="Database24"
                                                                    FontSize="48"
                                                                    Margin="0,0,20,0"
                                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
@@ -787,7 +787,7 @@
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <ui:SymbolIcon Grid.Column="0" Symbol="BoxMultiple24" FontSize="32" Margin="0,0,15,0"/>
+                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Box24" FontSize="32" Margin="0,0,15,0"/>
 
                                                     <StackPanel Grid.Column="1">
                                                         <TextBlock Text="{Binding Manufacturer}" FontSize="14" FontWeight="SemiBold"/>
@@ -842,7 +842,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Board24" FontSize="32" Margin="0,0,15,0"/>
+                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Circuit24" FontSize="32" Margin="0,0,15,0"/>
                                                     <StackPanel Grid.Column="1">
                                                         <TextBlock x:Name="MotherboardManufacturer" Text="Unknown" FontSize="14" FontWeight="SemiBold"/>
                                                         <TextBlock x:Name="MotherboardProduct" Text="Unknown" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
@@ -879,7 +879,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <ui:SymbolIcon Grid.Column="0" Symbol="DocumentCode24" FontSize="32" Margin="0,0,15,0"/>
+                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Document24" FontSize="32" Margin="0,0,15,0"/>
                                                     <StackPanel Grid.Column="1">
                                                         <TextBlock x:Name="BiosManufacturer" Text="Unknown" FontSize="14" FontWeight="SemiBold"/>
                                                         <TextBlock x:Name="BiosName" Text="Unknown" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
@@ -926,7 +926,7 @@
                                                     </Grid.RowDefinitions>
 
                                                     <ui:SymbolIcon Grid.Column="0" Grid.RowSpan="3"
-                                                                   Symbol="DesktopPulse24"
+                                                                   Symbol="Desktop24"
                                                                    FontSize="48"
                                                                    Margin="0,0,20,0"
                                                                    Foreground="#10893E"/>
@@ -1066,7 +1066,7 @@
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Wifi124" FontSize="32" Margin="0,0,15,0"/>
+                                                    <ui:SymbolIcon Grid.Column="0" Symbol="Wifi24" FontSize="32" Margin="0,0,15,0"/>
 
                                                     <StackPanel Grid.Column="1">
                                                         <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold"/>
@@ -1110,7 +1110,7 @@
                                         </Grid.RowDefinitions>
 
                                         <ui:SymbolIcon Grid.Column="0" Grid.RowSpan="2"
-                                                       Symbol="WindowDevTools24"
+                                                       Symbol="Window24"
                                                        FontSize="48"
                                                        Margin="0,0,20,0"
                                                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"/>
@@ -1322,7 +1322,7 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Symbol="TopSpeed24" Margin="0,0,8,0"/>
+                            <ui:SymbolIcon Symbol="Gauge24" Margin="0,0,8,0"/>
                             <TextBlock Text="性能测试" FontSize="14"/>
                         </StackPanel>
                     </TabItem.Header>
@@ -1485,7 +1485,7 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Grid.Column="0" Symbol="DatabaseStack24" FontSize="40" Margin="0,0,15,0" Foreground="#10893E"/>
+                                            <ui:SymbolIcon Grid.Column="0" Symbol="Database24" FontSize="40" Margin="0,0,15,0" Foreground="#10893E"/>
                                             <StackPanel Grid.Column="1">
                                                 <TextBlock Text="CPU 多核" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                                 <TextBlock x:Name="CpuMultiCoreScoreText" Text="0" FontSize="28" FontWeight="Bold" Foreground="#10893E"/>
@@ -1501,7 +1501,7 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <ui:SymbolIcon Grid.Column="0" Symbol="BoxMultiple24" FontSize="40" Margin="0,0,15,0" Foreground="#8A2BE2"/>
+                                            <ui:SymbolIcon Grid.Column="0" Symbol="Box24" FontSize="40" Margin="0,0,15,0" Foreground="#8A2BE2"/>
                                             <StackPanel Grid.Column="1">
                                                 <TextBlock Text="内存带宽" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                                 <TextBlock x:Name="MemoryScoreText" Text="0" FontSize="28" FontWeight="Bold" Foreground="#8A2BE2"/>

@@ -19,10 +19,13 @@ namespace FluentMonitor
         private readonly ProcessMonitor _processMonitor;
         private readonly DiskMonitor _diskMonitor;
         private readonly HardwareInfoService _hardwareInfoService;
+        private readonly BenchmarkService _benchmarkService;
         private readonly TrayIconService _trayIconService;
         private readonly DispatcherTimer _performanceTimer;
         private readonly DispatcherTimer _processTimer;
         private readonly DispatcherTimer _diskTimer;
+
+        private System.Threading.CancellationTokenSource? _benchmarkCancellation;
 
         private readonly ObservableCollection<double> _cpuValues = new();
         private readonly ObservableCollection<double> _memoryValues = new();
@@ -52,6 +55,7 @@ namespace FluentMonitor
             _processMonitor = new ProcessMonitor();
             _diskMonitor = new DiskMonitor();
             _hardwareInfoService = new HardwareInfoService();
+            _benchmarkService = new BenchmarkService();
             _trayIconService = new TrayIconService();
 
             InitializeCharts();
@@ -59,6 +63,7 @@ namespace FluentMonitor
             LoadSystemInfo();
             LoadDiskInfo();
             LoadHardwareInfo();
+            InitializeBenchmark();
             InitializeTheme();
         }
 
@@ -475,6 +480,100 @@ namespace FluentMonitor
                     ApplicationThemeManager.Apply(ApplicationTheme.Light);
                 }
             }
+        }
+
+        // Benchmark
+        private void InitializeBenchmark()
+        {
+            _benchmarkService.ProgressChanged += BenchmarkService_ProgressChanged;
+        }
+
+        private void BenchmarkService_ProgressChanged(object? sender, BenchmarkProgress e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                BenchmarkCurrentTest.Text = e.CurrentTest;
+                BenchmarkProgressBar.Value = e.Progress;
+                BenchmarkProgressPercent.Text = $"{e.Progress}%";
+                BenchmarkStatus.Text = e.Status;
+            });
+        }
+
+        private async void StartBenchmark_Click(object sender, RoutedEventArgs e)
+        {
+            // Prepare UI
+            StartBenchmarkButton.IsEnabled = false;
+            StopBenchmarkButton.IsEnabled = true;
+            BenchmarkProgressCard.Visibility = Visibility.Visible;
+            BenchmarkResultsPanel.Visibility = Visibility.Collapsed;
+
+            // Create cancellation token
+            _benchmarkCancellation = new System.Threading.CancellationTokenSource();
+
+            try
+            {
+                // Run benchmark
+                var result = await _benchmarkService.RunFullBenchmarkAsync(_benchmarkCancellation.Token);
+
+                // Display results
+                if (!_benchmarkCancellation.Token.IsCancellationRequested)
+                {
+                    DisplayBenchmarkResults(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"跑分测试出错: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                StartBenchmarkButton.IsEnabled = true;
+                StopBenchmarkButton.IsEnabled = false;
+                _benchmarkCancellation?.Dispose();
+                _benchmarkCancellation = null;
+            }
+        }
+
+        private void StopBenchmark_Click(object sender, RoutedEventArgs e)
+        {
+            _benchmarkCancellation?.Cancel();
+            StopBenchmarkButton.IsEnabled = false;
+        }
+
+        private void DisplayBenchmarkResults(BenchmarkResult result)
+        {
+            // Overall Score
+            OverallScoreText.Text = result.OverallScore.ToString();
+            var rating = _benchmarkService.GetPerformanceRating(result.OverallScore);
+            PerformanceRatingText.Text = rating;
+
+            var scoreColor = _benchmarkService.GetScoreColor(result.OverallScore);
+            OverallScoreText.Foreground = new System.Windows.Media.SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(scoreColor));
+            PerformanceRatingText.Foreground = new System.Windows.Media.SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(scoreColor));
+            OverallScoreIcon.Foreground = new System.Windows.Media.SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(scoreColor));
+
+            BenchmarkDateText.Text = $"测试时间: {result.TestDate:yyyy-MM-dd HH:mm:ss} | 总耗时: {result.TotalDuration.TotalSeconds:F1}秒";
+
+            // Individual Scores
+            CpuSingleCoreScoreText.Text = result.CpuSingleCoreScore.ToString();
+            CpuSingleDurationText.Text = $"耗时: {result.CpuSingleCoreDuration.TotalSeconds:F1}秒";
+
+            CpuMultiCoreScoreText.Text = result.CpuMultiCoreScore.ToString();
+            CpuMultiDurationText.Text = $"耗时: {result.CpuMultiCoreDuration.TotalSeconds:F1}秒";
+
+            MemoryScoreText.Text = result.MemoryScore.ToString();
+            MemoryDurationText.Text = $"耗时: {result.MemoryDuration.TotalSeconds:F1}秒";
+
+            DiskReadScoreText.Text = result.DiskReadScore.ToString();
+            DiskWriteScoreText.Text = result.DiskWriteScore.ToString();
+            DiskDurationText.Text = $"耗时: {result.DiskDuration.TotalSeconds:F1}秒";
+
+            // Show results
+            BenchmarkProgressCard.Visibility = Visibility.Collapsed;
+            BenchmarkResultsPanel.Visibility = Visibility.Visible;
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)

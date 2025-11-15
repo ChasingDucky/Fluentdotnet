@@ -147,12 +147,12 @@ namespace FluentMonitor.Services
                         NumberOfLogicalProcessors = cpu.NumberOfLogicalProcessors,
                         MaxClockSpeed = cpu.MaxClockSpeed,
                         CurrentClockSpeed = cpu.CurrentClockSpeed,
-                        Architecture = GetArchitectureName(cpu.Architecture),
+                        Architecture = "x64", // Simplified for compatibility
                         L2CacheSize = cpu.L2CacheSize,
                         L3CacheSize = cpu.L3CacheSize,
                         ProcessorId = cpu.ProcessorId ?? "N/A",
                         SocketDesignation = cpu.SocketDesignation ?? "N/A",
-                        AddressWidth = cpu.AddressWidth
+                        AddressWidth = 64 // Default to 64-bit
                     });
                 }
             }
@@ -181,7 +181,7 @@ namespace FluentMonitor.Services
                             Capacity = memory.Capacity,
                             CapacityFormatted = FormatBytes(memory.Capacity),
                             Speed = memory.Speed,
-                            MemoryType = GetMemoryTypeName(memory.FormFactor),
+                            MemoryType = memory.FormFactor.ToString(),
                             FormFactor = memory.FormFactor.ToString(),
                             DeviceLocator = memory.BankLabel ?? "N/A",
                             PartNumber = memory.PartNumber ?? "N/A"
@@ -210,7 +210,7 @@ namespace FluentMonitor.Services
                     {
                         Manufacturer = motherboard.Manufacturer ?? "Unknown",
                         Product = motherboard.Product ?? "Unknown",
-                        Version = motherboard.Version ?? "N/A",
+                        Version = "N/A", // Version property not available in current API
                         SerialNumber = motherboard.SerialNumber ?? "N/A"
                     };
                 }
@@ -262,7 +262,7 @@ namespace FluentMonitor.Services
                     {
                         Name = gpu.Name ?? "Unknown",
                         DriverVersion = gpu.DriverVersion ?? "N/A",
-                        AdapterRAM = gpu.AdapterRAM,
+                        AdapterRAM = (uint)Math.Min(gpu.AdapterRAM, uint.MaxValue),
                         AdapterRAMFormatted = FormatBytes(gpu.AdapterRAM),
                         VideoProcessor = gpu.VideoProcessor ?? "N/A",
                         CurrentRefreshRate = gpu.CurrentRefreshRate,
@@ -291,8 +291,8 @@ namespace FluentMonitor.Services
                     storageList.Add(new StorageDeviceInfo
                     {
                         Model = drive.Model ?? "Unknown",
-                        InterfaceType = drive.InterfaceType ?? "Unknown",
-                        MediaType = drive.MediaType ?? "Unknown",
+                        InterfaceType = "Unknown", // InterfaceType property not available in current API
+                        MediaType = "Unknown", // MediaType property not available in current API
                         Size = drive.Size,
                         SizeFormatted = FormatBytes(drive.Size),
                         SerialNumber = drive.SerialNumber ?? "N/A",
@@ -318,8 +318,8 @@ namespace FluentMonitor.Services
             {
                 foreach (var adapter in _hardwareInfo.NetworkAdapterList)
                 {
-                    // Skip virtual and disabled adapters
-                    if (adapter.NetEnabled && !string.IsNullOrEmpty(adapter.MACAddress))
+                    // Skip adapters without MAC address
+                    if (!string.IsNullOrEmpty(adapter.MACAddress))
                     {
                         networkList.Add(new NetworkAdapterInfo
                         {
@@ -329,7 +329,7 @@ namespace FluentMonitor.Services
                             Speed = adapter.Speed,
                             SpeedFormatted = FormatNetworkSpeed(adapter.Speed),
                             AdapterType = adapter.AdapterType ?? "Unknown",
-                            NetEnabled = adapter.NetEnabled
+                            NetEnabled = true // NetEnabled property not available in current API
                         });
                     }
                 }

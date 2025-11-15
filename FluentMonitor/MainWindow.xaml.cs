@@ -23,9 +23,9 @@ namespace FluentMonitor
         private readonly BenchmarkService _benchmarkService;
         private readonly TrayIconService _trayIconService;
         private readonly DeviceValuationService _deviceValuationService;
-        private readonly DispatcherTimer _performanceTimer;
-        private readonly DispatcherTimer _processTimer;
-        private readonly DispatcherTimer _diskTimer;
+        private DispatcherTimer _performanceTimer = null!;
+        private DispatcherTimer _processTimer = null!;
+        private DispatcherTimer _diskTimer = null!;
 
         private System.Threading.CancellationTokenSource? _benchmarkCancellation;
 
@@ -166,7 +166,7 @@ namespace FluentMonitor
             }
         }
 
-        private void LoadDeviceRecommendations(System.Collections.Generic.List<dynamic>? cpuInfo, System.Collections.Generic.List<dynamic>? memoryInfo)
+        private void LoadDeviceRecommendations(System.Collections.Generic.List<CpuHardwareInfo>? cpuInfo, System.Collections.Generic.List<MemoryHardwareInfo>? memoryInfo)
         {
             var recommendations = new System.Collections.Generic.List<DeviceRecommendation>();
 
@@ -185,7 +185,7 @@ namespace FluentMonitor
             if (memoryInfo != null && memoryInfo.Count > 0)
             {
                 var memory = memoryInfo[0];
-                var recommendation = _deviceValuationService.EvaluateMemory(memory.Speed, memory.Capacity / 1024 / 1024 / 1024);
+                var recommendation = _deviceValuationService.EvaluateMemory(memory.Speed, (int)(memory.Capacity / 1024 / 1024 / 1024));
                 if (recommendation != null)
                 {
                     recommendations.Add(recommendation);

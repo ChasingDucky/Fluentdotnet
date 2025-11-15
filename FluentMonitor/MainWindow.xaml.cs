@@ -18,6 +18,7 @@ namespace FluentMonitor
         private readonly PerformanceMonitor _performanceMonitor;
         private readonly ProcessMonitor _processMonitor;
         private readonly DiskMonitor _diskMonitor;
+        private readonly HardwareInfoService _hardwareInfoService;
         private readonly TrayIconService _trayIconService;
         private readonly DispatcherTimer _performanceTimer;
         private readonly DispatcherTimer _processTimer;
@@ -50,12 +51,14 @@ namespace FluentMonitor
             _performanceMonitor = new PerformanceMonitor();
             _processMonitor = new ProcessMonitor();
             _diskMonitor = new DiskMonitor();
+            _hardwareInfoService = new HardwareInfoService();
             _trayIconService = new TrayIconService();
 
             InitializeCharts();
             InitializeTimers();
             LoadSystemInfo();
             LoadDiskInfo();
+            LoadHardwareInfo();
             InitializeTheme();
         }
 
@@ -87,6 +90,69 @@ namespace FluentMonitor
         {
             var diskInfo = _diskMonitor.GetDiskInformation();
             DiskItemsControl.ItemsSource = diskInfo;
+        }
+
+        private void LoadHardwareInfo()
+        {
+            try
+            {
+                // Load CPU Info
+                var cpuInfo = _hardwareInfoService.GetCpuInfo();
+                CpuHardwareItemsControl.ItemsSource = cpuInfo;
+
+                // Load Memory Info
+                var memoryInfo = _hardwareInfoService.GetMemoryInfo();
+                MemoryHardwareItemsControl.ItemsSource = memoryInfo;
+
+                // Load Motherboard Info
+                var motherboardInfo = _hardwareInfoService.GetMotherboardInfo();
+                if (motherboardInfo != null)
+                {
+                    MotherboardManufacturer.Text = motherboardInfo.Manufacturer;
+                    MotherboardProduct.Text = motherboardInfo.Product;
+                    MotherboardVersion.Text = motherboardInfo.Version;
+                    MotherboardSerial.Text = motherboardInfo.SerialNumber;
+                }
+
+                // Load BIOS Info
+                var biosInfo = _hardwareInfoService.GetBiosInfo();
+                if (biosInfo != null)
+                {
+                    BiosManufacturer.Text = biosInfo.Manufacturer;
+                    BiosName.Text = biosInfo.Name;
+                    BiosVersion.Text = biosInfo.Version;
+                    BiosReleaseDate.Text = biosInfo.ReleaseDate;
+                }
+
+                // Load GPU Info
+                var gpuInfo = _hardwareInfoService.GetGpuInfo();
+                GpuItemsControl.ItemsSource = gpuInfo;
+
+                // Load Storage Devices
+                var storageInfo = _hardwareInfoService.GetStorageDevices();
+                StorageItemsControl.ItemsSource = storageInfo;
+
+                // Load Network Adapters
+                var networkInfo = _hardwareInfoService.GetNetworkAdapters();
+                NetworkItemsControl.ItemsSource = networkInfo;
+
+                // Load Operating System Info
+                var osInfo = _hardwareInfoService.GetOperatingSystemInfo();
+                if (osInfo != null)
+                {
+                    OsName.Text = osInfo.Name;
+                    OsManufacturer.Text = osInfo.Manufacturer;
+                    OsVersion.Text = osInfo.Version;
+                    OsBuildNumber.Text = osInfo.BuildNumber;
+                    OsArchitecture.Text = osInfo.Architecture;
+                    OsInstallDate.Text = osInfo.InstallDate;
+                    OsSystemDirectory.Text = osInfo.SystemDirectory;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading hardware info: {ex.Message}");
+            }
         }
 
         private void InitializeCharts()
@@ -433,6 +499,7 @@ namespace FluentMonitor
             _processTimer.Stop();
             _diskTimer.Stop();
             _performanceMonitor.Dispose();
+            _hardwareInfoService.Dispose();
             base.OnClosed(e);
         }
     }

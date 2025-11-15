@@ -20,6 +20,8 @@
 - 📋 **详细指标** - 对标 Windows 任务管理器的专业级监测面板
 - 🖥️ **多核监测** - 支持多核 CPU 的独立监测
 - 📊 **系统信息** - 显示 CPU 型号、频率、核心数、内存、运行时间等
+- 🪟 **桌面悬浮小部件** - 透明悬浮窗口实时显示关键性能指标，可拖动定位
+- 🎯 **智能托盘图标** - 托盘图标动态显示 CPU 使用率，支持颜色预警（蓝色/橙色/红色）
 
 ## 📸 功能概览
 
@@ -60,8 +62,25 @@
 
 ### ⚙️ 设置页面
 - **主题切换** - 在深色和浅色主题之间切换
+- **桌面悬浮小部件** - 开关桌面性能监控悬浮窗
+- **智能托盘图标** - 启用/禁用托盘图标动态 CPU 显示
 - **系统托盘选项** - 配置最小化到系统托盘行为
 - **应用信息** - 显示版本号和许可证信息
+
+### 🪟 桌面悬浮小部件
+- **透明悬浮窗** - 280x320 半透明深色卡片，始终置顶
+- **实时性能显示** - CPU、内存、磁盘、网络 4 项关键指标
+- **可拖动定位** - 鼠标左键拖动调整位置，默认定位在屏幕右下角
+- **快捷操作** - 双击打开主窗口，右键显示菜单，点击 × 关闭
+- **详细信息** - 内存显示已用/总量 GB，磁盘和网络自动单位换算
+- **颜色编码** - CPU 蓝色、内存绿色、磁盘橙色、网络红色
+
+### 🎯 智能托盘图标
+- **动态 CPU 显示** - 16x16 托盘图标实时显示 CPU 使用率百分比
+- **颜色预警** - 蓝色 (<50%)、橙色 (50-80%)、红色 (>80%)
+- **详细提示信息** - 鼠标悬停显示 CPU、内存、磁盘、网络完整数据
+- **自动更新** - 每秒刷新托盘图标和提示文本
+- **可配置** - 在设置页面开关智能托盘图标功能
 
 ## 🚀 快速开始
 
@@ -107,6 +126,7 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 - **性能监测**: System.Management 8.0.0、PerformanceCounters
 - **硬件信息**: Hardware.Info 100.1.0.1
 - **系统托盘**: Hardcodet.NotifyIcon.Wpf 1.1.0
+- **图像处理**: System.Drawing.Common 8.0.0
 
 ## 📦 主要依赖
 
@@ -116,6 +136,7 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 <PackageReference Include="System.Management" Version="8.0.0" />
 <PackageReference Include="Hardware.Info" Version="100.1.0.1" />
 <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
 ```
 
 ## 🎯 功能模块
@@ -145,6 +166,23 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 - 计算磁盘使用率
 - 格式化显示磁盘容量单位
 
+### TrayIconService 服务
+位于 `FluentMonitor/Services/TrayIconService.cs`,负责:
+- 动态生成 16x16 托盘图标显示 CPU 使用率
+- 根据 CPU 使用率设置颜色预警（蓝色/橙色/红色）
+- 生成详细的工具提示文本（CPU、内存、磁盘、网络）
+- Bitmap 到 BitmapImage 格式转换
+- 格式化速度和容量单位显示
+
+### DesktopWidget 窗口
+位于 `FluentMonitor/DesktopWidget.xaml` 和 `DesktopWidget.xaml.cs`,负责:
+- 展示透明悬浮性能监控小部件（280x320）
+- 实时更新 CPU、内存、磁盘、网络数据
+- 支持鼠标拖动调整位置
+- 双击打开主窗口，右键显示上下文菜单
+- 自动定位到屏幕右下角
+- 格式化显示各项性能指标
+
 ### MainWindow
 位于 `MainWindow.xaml` 和 `MainWindow.xaml.cs`,负责:
 - 展示 Fluent Design 用户界面（4个选项卡式布局）
@@ -153,6 +191,8 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 - 实时更新磁盘信息（5秒刷新）
 - 管理图表数据集合（60秒滚动窗口）
 - 系统托盘集成和窗口状态管理
+- 桌面悬浮小部件管理和数据同步
+- 智能托盘图标动态更新
 - 主题切换功能
 - 进程结束功能（带确认对话框）
 - 格式化显示各种数据单位
@@ -221,6 +261,8 @@ var processes = _processMonitor.GetTopProcesses(15); // 修改此值
 - [x] 添加磁盘详细信息（各分区使用情况）
 - [x] 添加系统托盘支持
 - [x] 添加深色/浅色主题切换
+- [x] 添加桌面悬浮小部件（Widget）
+- [x] 添加智能托盘图标（动态 CPU 显示）
 - [ ] 添加 GPU 监测功能
 - [ ] 添加温度监测
 - [ ] 添加启动项管理

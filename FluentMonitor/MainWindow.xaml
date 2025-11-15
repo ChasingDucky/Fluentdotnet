@@ -571,11 +571,57 @@
                                     </Grid>
                                 </ui:Card>
 
+                                <!-- Desktop Widget -->
+                                <ui:Card Margin="0,0,0,15" Padding="20">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="桌面悬浮小部件" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                            <TextBlock Text="在桌面显示性能监控小部件"
+                                                       FontSize="12"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+
+                                        <ui:ToggleSwitch Grid.Column="1"
+                                                        x:Name="ShowWidgetToggle"
+                                                        IsChecked="False"
+                                                        VerticalAlignment="Center"
+                                                        Checked="ShowWidgetToggle_Checked"
+                                                        Unchecked="ShowWidgetToggle_Unchecked"/>
+                                    </Grid>
+                                </ui:Card>
+
+                                <!-- Smart Tray Icon -->
+                                <ui:Card Margin="0,0,0,15" Padding="20">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="智能托盘图标" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                            <TextBlock Text="托盘图标动态显示 CPU 使用率"
+                                                       FontSize="12"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+
+                                        <ui:ToggleSwitch Grid.Column="1"
+                                                        x:Name="SmartTrayIconToggle"
+                                                        IsChecked="True"
+                                                        VerticalAlignment="Center"/>
+                                    </Grid>
+                                </ui:Card>
+
                                 <!-- About -->
                                 <ui:Card Padding="20">
                                     <StackPanel>
                                         <TextBlock Text="关于" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                                        <TextBlock Text="Fluent Monitor v1.1" FontSize="14" Margin="0,0,0,5"/>
+                                        <TextBlock Text="Fluent Monitor v1.2" FontSize="14" Margin="0,0,0,5"/>
                                         <TextBlock Text="基于 Microsoft Fluent Design 的系统性能监测工具"
                                                    FontSize="12"
                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"

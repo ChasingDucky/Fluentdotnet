@@ -18,6 +18,7 @@ namespace FluentMonitor
         private readonly PerformanceMonitor _performanceMonitor;
         private readonly ProcessMonitor _processMonitor;
         private readonly DiskMonitor _diskMonitor;
+        private readonly TrayIconService _trayIconService;
         private readonly DispatcherTimer _performanceTimer;
         private readonly DispatcherTimer _processTimer;
         private readonly DispatcherTimer _diskTimer;
@@ -29,9 +30,18 @@ namespace FluentMonitor
         private readonly ObservableCollection<double> _networkSentValues = new();
         private readonly ObservableCollection<double> _networkReceivedValues = new();
 
+        private DesktopWidget? _desktopWidget;
         private const int MaxDataPoints = 60; // 60 seconds of history
         private SystemInfo? _systemInfo;
         private bool _isClosing = false;
+
+        // Latest performance data for widget and tray
+        private float _latestCpuUsage = 0;
+        private float _latestMemoryUsage = 0;
+        private float _latestMemoryUsedGB = 0;
+        private float _latestMemoryTotalGB = 0;
+        private float _latestDiskSpeed = 0;
+        private float _latestNetworkSpeed = 0;
 
         public MainWindow()
         {
@@ -40,6 +50,7 @@ namespace FluentMonitor
             _performanceMonitor = new PerformanceMonitor();
             _processMonitor = new ProcessMonitor();
             _diskMonitor = new DiskMonitor();
+            _trayIconService = new TrayIconService();
 
             InitializeCharts();
             InitializeTimers();
@@ -64,6 +75,7 @@ namespace FluentMonitor
                 SystemCpuName.Text = _systemInfo.CpuName;
                 SystemTotalMemory.Text = FormatBytes(_systemInfo.TotalMemory);
                 SystemUptime.Text = _systemInfo.SystemUptime;
+                _latestMemoryTotalGB = _systemInfo.TotalMemory / 1024f / 1024f / 1024f;
 
                 // Update CPU card details
                 CpuSpeedText.Text = $"速度: {_systemInfo.CpuBaseSpeed:F2} GHz";
@@ -189,22 +201,28 @@ namespace FluentMonitor
             SystemProcessInfo.Text = $"{data.ProcessCount} / {data.ThreadCount} / {data.HandleCount}";
 
             // Update CPU
+            _latestCpuUsage = data.CpuUsage;
             CpuUsageText.Text = $"{data.CpuUsage:F1}%";
             AddDataPoint(_cpuValues, data.CpuUsage);
 
             // Update Memory
-            MemoryUsageText.Text = $"{data.MemoryUsage:F1}%";
+            _latestMemoryUsage = data.MemoryUsage;
             var usedMemoryGB = data.MemoryUsed / 1024.0 / 1024.0 / 1024.0;
             var totalMemoryGB = (data.MemoryUsed + data.MemoryAvailable) / 1024.0 / 1024.0 / 1024.0;
             var committedGB = data.MemoryCommitted / 1024.0 / 1024.0 / 1024.0;
             var cachedGB = data.MemoryCached / 1024.0 / 1024.0 / 1024.0;
 
+            _latestMemoryUsedGB = (float)usedMemoryGB;
+            _latestMemoryTotalGB = (float)totalMemoryGB;
+
+            MemoryUsageText.Text = $"{data.MemoryUsage:F1}%";
             MemoryDetailsText.Text = $"已用: {usedMemoryGB:F1} GB / {totalMemoryGB:F1} GB";
             MemoryCommittedText.Text = $"已提交: {committedGB:F1} GB";
             MemoryCachedText.Text = $"已缓存: {cachedGB:F1} GB";
             AddDataPoint(_memoryValues, data.MemoryUsage);
 
             // Update Disk
+            _latestDiskSpeed = data.DiskReadSpeed + data.DiskWriteSpeed;
             DiskActiveTimeText.Text = $"{data.DiskActiveTime:F0}%";
             DiskReadText.Text = $"读取: {data.DiskReadSpeed:F2} MB/s";
             DiskWriteText.Text = $"写入: {data.DiskWriteSpeed:F2} MB/s";
@@ -213,6 +231,7 @@ namespace FluentMonitor
 
             // Update Network
             var totalNetwork = data.NetworkSentSpeed + data.NetworkReceivedSpeed;
+            _latestNetworkSpeed = totalNetwork;
             NetworkTotalText.Text = FormatSpeed(totalNetwork);
             NetworkSentText.Text = $"↑ 发送: {data.NetworkSentSpeed:F1} KB/s";
             NetworkReceivedText.Text = $"↓ 接收: {data.NetworkReceivedSpeed:F1} KB/s";
@@ -223,6 +242,33 @@ namespace FluentMonitor
             if (_systemInfo != null)
             {
                 SystemUptime.Text = _systemInfo.SystemUptime;
+            }
+
+            // Update widget if visible
+            if (_desktopWidget != null && _desktopWidget.IsVisible)
+            {
+                _desktopWidget.UpdateData(_latestCpuUsage, _latestMemoryUsage,
+                    _latestMemoryUsedGB, _latestMemoryTotalGB,
+                    _latestDiskSpeed, _latestNetworkSpeed);
+            }
+
+            // Update smart tray icon
+            if (SmartTrayIconToggle.IsChecked == true)
+            {
+                try
+                {
+                    TrayIcon.IconSource = _trayIconService.GenerateCpuIcon(_latestCpuUsage);
+                    TrayIcon.ToolTipText = _trayIconService.GenerateTooltipText(
+                        _latestCpuUsage, _latestMemoryUsage, _latestDiskSpeed, _latestNetworkSpeed);
+                }
+                catch
+                {
+                    // Ignore tray icon update errors
+                }
+            }
+            else
+            {
+                TrayIcon.ToolTipText = $"Fluent Monitor\n双击打开主窗口";
             }
         }
 
@@ -270,6 +316,22 @@ namespace FluentMonitor
             {
                 return $"{kbps / 1024 / 1024:F2} GB/s";
             }
+        }
+
+        // Desktop Widget Events
+        private void ShowWidgetToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            if (_desktopWidget == null)
+            {
+                _desktopWidget = new DesktopWidget();
+            }
+
+            _desktopWidget.Show();
+        }
+
+        private void ShowWidgetToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _desktopWidget?.Hide();
         }
 
         // System Tray Events
@@ -359,6 +421,7 @@ namespace FluentMonitor
             else
             {
                 TrayIcon.Dispose();
+                _desktopWidget?.Close();
             }
 
             base.OnClosing(e);
